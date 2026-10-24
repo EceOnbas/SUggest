@@ -6,6 +6,6 @@ SUggest is the go-to mobile app Sabancı students open when choosing courses. To
 This project was developed by Group 3:
 
 * **Beren Güler** - [GitHub Profile](https://github.com/beren-guler)
-* **Nil Sözlü**
+* **Nil Sözlü** - [GitHub Profile](https://github.com/nilsozlu)
 * **Emine Sena Cesur**
 * **Ece Önbaş** - [GitHub Profile](https://github.com/EceOnbas)
