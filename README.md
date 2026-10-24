@@ -7,5 +7,5 @@ This project was developed by Group 3:
 
 * **Beren Güler** - [GitHub Profile](https://github.com/beren-guler)
 * **Nil Sözlü** - [GitHub Profile](https://github.com/nilsozlu)
-* **Emine Sena Cesur**
+* **Emine Sena Cesur** - [GitHub Profile](https://github.com/sena-cesur)
 * **Ece Önbaş** - [GitHub Profile](https://github.com/EceOnbas)
