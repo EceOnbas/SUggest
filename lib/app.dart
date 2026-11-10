@@ -4,6 +4,10 @@ import 'core/theme/app_colors.dart';
 import 'core/theme/app_spacing.dart';
 import 'core/theme/app_text_styles.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/app_back_button.dart';
+import 'core/widgets/primary_button.dart';
+import 'core/widgets/secondary_button.dart';
+import 'core/widgets/text_link.dart';
 
 class SUggestApp extends StatelessWidget {
   const SUggestApp({super.key});
@@ -32,6 +36,7 @@ class _ThemePreview extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const AppBackButton(),
               Text('SUggest', style: AppTextStyles.wordmark),
               const SizedBox(height: AppSpacing.lg),
               Text('Know the course before you register.',
@@ -40,10 +45,14 @@ class _ThemePreview extends StatelessWidget {
               Text('Ratings and reviews from Sabancı students.',
                   style: AppTextStyles.lead),
               const Spacer(),
-              FilledButton(onPressed: () {}, child: const Text('Create account')),
+              PrimaryButton(label: 'Create account', onPressed: () {}),
               const SizedBox(height: AppSpacing.md),
-              OutlinedButton(onPressed: () {}, child: const Text('Log in')),
-              const SizedBox(height: AppSpacing.sm),
+              SecondaryButton(label: 'Log in', onPressed: () {}),
+              PromptLink(
+                  prompt: 'New here?',
+                  linkLabel: 'Create account',
+                  onPressed: () {}),
+              Center(child: TextLink(label: 'Skip for now', onPressed: () {})),
               Center(
                 child: Text('For @sabanciuniv.edu accounts only.',
                     style: AppTextStyles.caption
