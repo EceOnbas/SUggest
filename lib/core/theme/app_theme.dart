@@ -124,8 +124,8 @@ abstract final class AppTheme {
         dividerColor: AppColors.borderStrong,
       ),
       bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: AppColors.surface,
-        showDragHandle: true,
+        backgroundColor: AppColors.surfaceMuted,
+        showDragHandle: false,
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.vertical(top: Radius.circular(AppRadius.sheet)),
