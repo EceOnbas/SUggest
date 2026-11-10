@@ -13,6 +13,7 @@ import '../../core/widgets/note_box.dart';
 import '../../core/widgets/password_field.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/secondary_button.dart';
+import '../../core/widgets/state_views.dart';
 import '../../core/widgets/step_progress_bar.dart';
 import '../../core/widgets/su_email_field.dart';
 import '../../core/widgets/text_link.dart';
@@ -162,6 +163,17 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
                     isError: true),
               ),
             ]),
+            const SizedBox(height: AppSpacing.xl),
+            Text('Loading, empty and error', style: AppTextStyles.heading),
+            const SizedBox(height: AppSpacing.md),
+            const LoadingList(itemCount: 1, label: 'Loading reviews'),
+            EmptyState(
+              title: 'No reviews yet',
+              message: 'Be the first to write one.',
+              actionLabel: 'Write a review',
+              onAction: () {},
+            ),
+            ErrorState(title: "Couldn't load this course", onRetry: () {}),
             const SizedBox(height: AppSpacing.xl),
             PrimaryButton(label: 'Create account', onPressed: () {}),
             const SizedBox(height: AppSpacing.md),
