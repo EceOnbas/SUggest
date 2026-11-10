@@ -9,3 +9,12 @@ This project was developed by Group 3:
 * **Nil Sözlü** - [GitHub Profile](https://github.com/nilsozlu)
 * **Emine Sena Cesur** - [GitHub Profile](https://github.com/sena-cesur)
 * **Ece Önbaş** - [GitHub Profile](https://github.com/EceOnbas)
+
+## 🚀 Getting started
+
+This is a Flutter app (Dart SDK ^3.13).
+
+```bash
+flutter pub get
+flutter run
+```
