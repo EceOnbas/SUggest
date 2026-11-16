@@ -12,14 +12,19 @@ import 'package:suggest/core/widgets/password_field.dart';
 import 'package:suggest/core/widgets/su_email_field.dart';
 
 Widget _host(Widget child) => MaterialApp(
-      theme: AppTheme.light,
-      home: Scaffold(
-          body: Padding(padding: const EdgeInsets.all(24), child: child)),
-    );
+  theme: AppTheme.light,
+  home: Scaffold(
+    body: Padding(padding: const EdgeInsets.all(24), child: child),
+  ),
+);
 
 Color _outline(WidgetTester tester) {
-  final box = tester.widget<Container>(find.descendant(
-      of: find.byType(FieldBox), matching: find.byType(Container)));
+  final box = tester.widget<Container>(
+    find.descendant(
+      of: find.byType(FieldBox),
+      matching: find.byType(Container),
+    ),
+  );
   return ((box.decoration! as BoxDecoration).border! as Border).top.color;
 }
 
@@ -38,11 +43,18 @@ void main() {
     });
 
     test('splits a pasted address', () {
-      expect(SuEmail.split('beren@sabanciuniv.edu'),
-          (localPart: 'beren', isSuDomain: true));
-      expect(SuEmail.split('beren@gmail.com'),
-          (localPart: 'beren', isSuDomain: false));
-      expect(SuEmail.split('beren@sab'), (localPart: 'beren', isSuDomain: true));
+      expect(SuEmail.split('beren@sabanciuniv.edu'), (
+        localPart: 'beren',
+        isSuDomain: true,
+      ));
+      expect(SuEmail.split('beren@gmail.com'), (
+        localPart: 'beren',
+        isSuDomain: false,
+      ));
+      expect(SuEmail.split('beren@sab'), (
+        localPart: 'beren',
+        isSuDomain: true,
+      ));
     });
   });
 
@@ -58,9 +70,12 @@ void main() {
       final c = TextEditingController();
       String? changed;
       await tester.pumpWidget(
-          _host(SuEmailField(controller: c, onChanged: (v) => changed = v)));
+        _host(SuEmailField(controller: c, onChanged: (v) => changed = v)),
+      );
       await tester.enterText(
-          find.byType(TextField), 'beren.guler@sabanciuniv.edu');
+        find.byType(TextField),
+        'beren.guler@sabanciuniv.edu',
+      );
       await tester.pump();
       expect(c.text, 'beren.guler');
       expect(changed, 'beren.guler');
@@ -84,14 +99,17 @@ void main() {
     testWidgets('shows the screen error with its action', (tester) async {
       var taps = 0;
       final c = TextEditingController(text: 'beren.guler');
-      await tester.pumpWidget(_host(SuEmailField(
-        controller: c,
-        errorText: 'This email already has an account.',
-        errorActionLabel: 'Log in instead',
-        onErrorAction: () => taps++,
-      )));
-      await tester
-          .tapOnText(find.textRange.ofSubstring('Log in instead'));
+      await tester.pumpWidget(
+        _host(
+          SuEmailField(
+            controller: c,
+            errorText: 'This email already has an account.',
+            errorActionLabel: 'Log in instead',
+            onErrorAction: () => taps++,
+          ),
+        ),
+      );
+      await tester.tapOnText(find.textRange.ofSubstring('Log in instead'));
       expect(taps, 1);
     });
   });
@@ -127,14 +145,25 @@ void main() {
     });
 
     testWidgets('error replaces the helper text', (tester) async {
-      await tester.pumpWidget(_host(const AppTextField(
-          label: 'Course', helperText: 'Search by code or title.')));
+      await tester.pumpWidget(
+        _host(
+          const AppTextField(
+            label: 'Course',
+            helperText: 'Search by code or title.',
+          ),
+        ),
+      );
       expect(find.text('Search by code or title.'), findsOneWidget);
 
-      await tester.pumpWidget(_host(const AppTextField(
-          label: 'Course',
-          helperText: 'Search by code or title.',
-          errorText: 'Choose a course.')));
+      await tester.pumpWidget(
+        _host(
+          const AppTextField(
+            label: 'Course',
+            helperText: 'Search by code or title.',
+            errorText: 'Choose a course.',
+          ),
+        ),
+      );
       expect(find.text('Search by code or title.'), findsNothing);
       expect(find.text('Choose a course.'), findsOneWidget);
       expect(_outline(tester), AppColors.error);
@@ -142,24 +171,31 @@ void main() {
 
     testWidgets('optional adds "(optional)" to the label', (tester) async {
       await tester.pumpWidget(
-          _host(const AppTextField(label: 'Minor', optional: true)));
-      expect(find.textContaining('(optional)', findRichText: true),
-          findsOneWidget);
+        _host(const AppTextField(label: 'Minor', optional: true)),
+      );
+      expect(
+        find.textContaining('(optional)', findRichText: true),
+        findsOneWidget,
+      );
     });
   });
 
   group('AppDropdownField', () {
     testWidgets('picks an item', (tester) async {
       String? picked;
-      await tester.pumpWidget(_host(StatefulBuilder(
-        builder: (context, setState) => AppDropdownField<String>(
-          label: 'Major',
-          hintText: 'Choose your major',
-          items: const ['Computer Science', 'Economics'],
-          value: picked,
-          onChanged: (v) => setState(() => picked = v),
+      await tester.pumpWidget(
+        _host(
+          StatefulBuilder(
+            builder: (context, setState) => AppDropdownField<String>(
+              label: 'Major',
+              hintText: 'Choose your major',
+              items: const ['Computer Science', 'Economics'],
+              value: picked,
+              onChanged: (v) => setState(() => picked = v),
+            ),
+          ),
         ),
-      )));
+      );
       expect(find.text('Choose your major'), findsOneWidget);
       await tester.tap(find.text('Choose your major'));
       await tester.pumpAndSettle();
@@ -169,13 +205,17 @@ void main() {
     });
 
     testWidgets('locked field does not open', (tester) async {
-      await tester.pumpWidget(_host(const AppDropdownField<String>(
-        label: 'Term',
-        hintText: 'Pick a course first',
-        items: ['Fall 2025'],
-        value: null,
-        onChanged: null,
-      )));
+      await tester.pumpWidget(
+        _host(
+          const AppDropdownField<String>(
+            label: 'Term',
+            hintText: 'Pick a course first',
+            items: ['Fall 2025'],
+            value: null,
+            onChanged: null,
+          ),
+        ),
+      );
       await tester.tap(find.text('Pick a course first'));
       await tester.pumpAndSettle();
       expect(find.text('Fall 2025'), findsNothing);
@@ -183,13 +223,21 @@ void main() {
   });
 
   testWidgets('NoteBox uses grey for info and red for errors', (tester) async {
-    await tester.pumpWidget(_host(const Column(children: [
-      NoteBox.info('Look in Junk or Spam.'),
-      NoteBox.error('Not verified yet.'),
-    ])));
+    await tester.pumpWidget(
+      _host(
+        const Column(
+          children: [
+            NoteBox.info('Look in Junk or Spam.'),
+            NoteBox.error('Not verified yet.'),
+          ],
+        ),
+      ),
+    );
     expect(find.byIcon(Icons.info_outline), findsOneWidget);
     expect(find.byIcon(Icons.error_outline), findsOneWidget);
-    expect(tester.widget<Text>(find.text('Not verified yet.')).style!.color,
-        AppColors.error);
+    expect(
+      tester.widget<Text>(find.text('Not verified yet.')).style!.color,
+      AppColors.error,
+    );
   });
 }

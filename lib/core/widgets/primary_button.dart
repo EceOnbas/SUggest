@@ -27,7 +27,9 @@ class PrimaryButton extends StatelessWidget {
               width: 22,
               height: 22,
               child: CircularProgressIndicator(
-                  strokeWidth: 2.5, color: AppColors.onPrimary),
+                strokeWidth: 2.5,
+                color: AppColors.onPrimary,
+              ),
             )
           : Text(label),
     );

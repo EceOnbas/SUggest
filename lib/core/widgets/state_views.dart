@@ -12,12 +12,7 @@ import 'secondary_button.dart';
 
 /// A grey placeholder block that gently pulses while content loads.
 class SkeletonBox extends StatefulWidget {
-  const SkeletonBox({
-    super.key,
-    this.width,
-    this.height = 16,
-    this.radius = 8,
-  });
+  const SkeletonBox({super.key, this.width, this.height = 16, this.radius = 8});
 
   /// Null fills the available width.
   final double? width;
@@ -143,7 +138,10 @@ class EmptyState extends StatelessWidget {
       action: actionLabel == null
           ? null
           : SecondaryButton(
-              label: actionLabel!, onPressed: onAction, compact: true),
+              label: actionLabel!,
+              onPressed: onAction,
+              compact: true,
+            ),
     );
   }
 }
@@ -196,12 +194,18 @@ class _StateMessage extends StatelessWidget {
         children: [
           Icon(icon, size: 36, color: iconColor),
           const SizedBox(height: AppSpacing.md),
-          Text(title,
-              style: AppTextStyles.heading, textAlign: TextAlign.center),
+          Text(
+            title,
+            style: AppTextStyles.heading,
+            textAlign: TextAlign.center,
+          ),
           if (message != null) ...[
             const SizedBox(height: AppSpacing.sm),
-            Text(message!,
-                style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
+            Text(
+              message!,
+              style: AppTextStyles.bodySmall,
+              textAlign: TextAlign.center,
+            ),
           ],
           if (action != null) ...[
             const SizedBox(height: AppSpacing.lg),

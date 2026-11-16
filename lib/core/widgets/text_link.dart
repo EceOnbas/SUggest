@@ -81,8 +81,9 @@ class _PromptLinkState extends State<PromptLink> {
             children: [
               TextSpan(
                 text: widget.linkLabel,
-                style: AppTextStyles.bodyStrong
-                    .copyWith(color: AppColors.primary),
+                style: AppTextStyles.bodyStrong.copyWith(
+                  color: AppColors.primary,
+                ),
                 recognizer: _tap,
               ),
             ],

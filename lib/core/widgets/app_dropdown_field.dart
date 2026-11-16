@@ -60,25 +60,35 @@ class AppDropdownField<T> extends StatelessWidget {
                 onChanged: active ? onChanged : null,
                 hint: hintText == null
                     ? null
-                    : Text(hintText!,
-                        style: AppTextStyles.input
-                            .copyWith(color: AppColors.muted)),
+                    : Text(
+                        hintText!,
+                        style: AppTextStyles.input.copyWith(
+                          color: AppColors.muted,
+                        ),
+                      ),
                 disabledHint: hintText == null
                     ? null
-                    : Text(hintText!,
-                        style: AppTextStyles.input
-                            .copyWith(color: AppColors.muted)),
+                    : Text(
+                        hintText!,
+                        style: AppTextStyles.input.copyWith(
+                          color: AppColors.muted,
+                        ),
+                      ),
                 style: AppTextStyles.input,
                 dropdownColor: AppColors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.input),
-                icon: Icon(Icons.keyboard_arrow_down_rounded,
-                    color: active ? AppColors.ink : AppColors.inputBorder),
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: active ? AppColors.ink : AppColors.inputBorder,
+                ),
                 items: [
                   for (final item in items)
                     DropdownMenuItem<T>(
                       value: item,
-                      child:
-                          Text(labelOf(item), overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        labelOf(item),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                 ],
               ),

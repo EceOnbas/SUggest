@@ -107,12 +107,12 @@ class ChipFilterRow extends StatelessWidget {
 /// the warm yellow tag for a selected topic.
 class TagChip extends StatelessWidget {
   const TagChip(this.label, {super.key})
-      : _background = AppColors.sakura1,
-        _foreground = AppColors.sakura5;
+    : _background = AppColors.sakura1,
+      _foreground = AppColors.sakura5;
 
   const TagChip.topic(this.label, {super.key})
-      : _background = AppColors.tagBackground,
-        _foreground = AppColors.tagText;
+    : _background = AppColors.tagBackground,
+      _foreground = AppColors.tagText;
 
   final String label;
   final Color _background;
@@ -128,8 +128,10 @@ class TagChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppTextStyles.caption
-            .copyWith(color: _foreground, fontWeight: FontWeight.w700),
+        style: AppTextStyles.caption.copyWith(
+          color: _foreground,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

@@ -13,8 +13,11 @@ import '../theme/app_text_styles.dart';
 abstract final class AppToast {
   static const duration = Duration(milliseconds: 3500);
 
-  static void show(BuildContext context, String message,
-      {bool isError = false}) {
+  static void show(
+    BuildContext context,
+    String message, {
+    bool isError = false,
+  }) {
     final messenger = ScaffoldMessenger.of(context);
     messenger
       ..hideCurrentSnackBar()
@@ -25,7 +28,8 @@ abstract final class AppToast {
           elevation: 0,
           backgroundColor: isError ? AppColors.error : AppColors.ink,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppRadius.note)),
+            borderRadius: BorderRadius.circular(AppRadius.note),
+          ),
           margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           padding: const EdgeInsets.only(left: 16),
           content: Row(
@@ -40,14 +44,19 @@ abstract final class AppToast {
                 child: Text(
                   message,
                   style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.onPrimary, fontWeight: FontWeight.w600),
+                    color: AppColors.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               IconButton(
                 tooltip: 'Close',
                 onPressed: messenger.hideCurrentSnackBar,
-                icon: const Icon(Icons.close,
-                    size: 20, color: AppColors.onPrimary),
+                icon: const Icon(
+                  Icons.close,
+                  size: 20,
+                  color: AppColors.onPrimary,
+                ),
               ),
             ],
           ),

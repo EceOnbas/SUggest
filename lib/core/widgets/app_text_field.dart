@@ -16,14 +16,20 @@ class FieldLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text.rich(
-      TextSpan(text: text, style: AppTextStyles.label, children: [
-        if (optional)
-          TextSpan(
-            text: ' (optional)',
-            style: AppTextStyles.label
-                .copyWith(fontWeight: FontWeight.w400, color: AppColors.muted),
-          ),
-      ]),
+      TextSpan(
+        text: text,
+        style: AppTextStyles.label,
+        children: [
+          if (optional)
+            TextSpan(
+              text: ' (optional)',
+              style: AppTextStyles.label.copyWith(
+                fontWeight: FontWeight.w400,
+                color: AppColors.muted,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -51,10 +57,10 @@ class FieldBox extends StatelessWidget {
     final color = hasError
         ? AppColors.error
         : focused
-            ? AppColors.primary
-            : enabled
-                ? AppColors.inputBorder
-                : AppColors.border;
+        ? AppColors.primary
+        : enabled
+        ? AppColors.inputBorder
+        : AppColors.border;
     final width = (hasError || focused) ? 2.0 : 1.5;
     return Container(
       height: AppSpacing.inputHeight,

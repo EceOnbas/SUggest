@@ -23,8 +23,7 @@ Future<T?> showAppBottomSheet<T>({
     barrierColor: AppColors.ink.withValues(alpha: 0.55),
     builder: (context) => Padding(
       // Lift the sheet above the keyboard.
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
         child: Column(
@@ -44,8 +43,10 @@ Future<T?> showAppBottomSheet<T>({
             const SizedBox(height: 16),
             Semantics(
               header: true,
-              child: Text(title,
-                  style: AppTextStyles.heading.copyWith(fontSize: 22)),
+              child: Text(
+                title,
+                style: AppTextStyles.heading.copyWith(fontSize: 22),
+              ),
             ),
             const SizedBox(height: 16),
             builder(context),

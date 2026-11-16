@@ -24,8 +24,7 @@ class NoteBox extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color:
-              _isError ? AppColors.errorBackground : AppColors.surfaceMuted,
+          color: _isError ? AppColors.errorBackground : AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(AppRadius.note),
         ),
         child: Row(

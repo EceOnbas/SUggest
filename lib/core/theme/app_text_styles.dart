@@ -9,16 +9,20 @@ abstract final class AppTextStyles {
   /// The font family name declared in pubspec.yaml.
   static const fontFamily = 'Schibsted Grotesk';
 
-  static TextStyle _base(double size, FontWeight weight,
-          {double? height, double? letterSpacing, Color color = AppColors.ink}) =>
-      TextStyle(
-        fontFamily: fontFamily,
-        fontSize: size,
-        fontWeight: weight,
-        height: height,
-        letterSpacing: letterSpacing,
-        color: color,
-      );
+  static TextStyle _base(
+    double size,
+    FontWeight weight, {
+    double? height,
+    double? letterSpacing,
+    Color color = AppColors.ink,
+  }) => TextStyle(
+    fontFamily: fontFamily,
+    fontSize: size,
+    fontWeight: weight,
+    height: height,
+    letterSpacing: letterSpacing,
+    color: color,
+  );
 
   /// Welcome headline (36).
   static TextStyle get display =>

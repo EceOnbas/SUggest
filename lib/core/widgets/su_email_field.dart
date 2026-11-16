@@ -82,8 +82,10 @@ class _SuEmailFieldState extends State<SuEmailField> {
       onSubmitted: widget.onSubmitted,
       suffix: Padding(
         padding: const EdgeInsets.only(left: 4),
-        child: Text(SuEmail.domain,
-            style: AppTextStyles.input.copyWith(color: AppColors.muted)),
+        child: Text(
+          SuEmail.domain,
+          style: AppTextStyles.input.copyWith(color: AppColors.muted),
+        ),
       ),
     );
   }

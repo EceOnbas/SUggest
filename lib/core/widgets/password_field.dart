@@ -56,7 +56,7 @@ class _PasswordFieldState extends State<PasswordField> {
       autofillHints: [
         widget.isNewPassword
             ? AutofillHints.newPassword
-            : AutofillHints.password
+            : AutofillHints.password,
       ],
       onChanged: widget.onChanged,
       onSubmitted: widget.onSubmitted,
@@ -79,8 +79,9 @@ class _PasswordFieldState extends State<PasswordField> {
                     backgroundColor: AppColors.background,
                     foregroundColor: AppColors.ink,
                     shape: const StadiumBorder(),
-                    textStyle: AppTextStyles.label
-                        .copyWith(fontWeight: FontWeight.w700),
+                    textStyle: AppTextStyles.label.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   child: Text(_shown ? 'Hide' : 'Show'),
                 ),

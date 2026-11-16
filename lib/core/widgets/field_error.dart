@@ -40,7 +40,10 @@ class _FieldErrorState extends State<FieldError> {
   @override
   Widget build(BuildContext context) {
     final style = AppTextStyles.helper.copyWith(
-        color: AppColors.error, fontWeight: FontWeight.w600, height: 1.4);
+      color: AppColors.error,
+      fontWeight: FontWeight.w600,
+      height: 1.4,
+    );
     return Semantics(
       liveRegion: true,
       child: Row(
@@ -49,22 +52,31 @@ class _FieldErrorState extends State<FieldError> {
           if (widget.showIcon) ...[
             const Padding(
               padding: EdgeInsets.only(top: 1),
-              child:
-                  Icon(Icons.error_outline, size: 18, color: AppColors.error),
+              child: Icon(
+                Icons.error_outline,
+                size: 18,
+                color: AppColors.error,
+              ),
             ),
             const SizedBox(width: 8),
           ],
           Expanded(
             child: Text.rich(
-              TextSpan(text: widget.message, style: style, children: [
-                if (widget.actionLabel != null)
-                  TextSpan(
-                    text: ' ${widget.actionLabel}',
-                    style: style.copyWith(
-                        color: AppColors.primary, fontWeight: FontWeight.w700),
-                    recognizer: _tap,
-                  ),
-              ]),
+              TextSpan(
+                text: widget.message,
+                style: style,
+                children: [
+                  if (widget.actionLabel != null)
+                    TextSpan(
+                      text: ' ${widget.actionLabel}',
+                      style: style.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      recognizer: _tap,
+                    ),
+                ],
+              ),
             ),
           ),
         ],

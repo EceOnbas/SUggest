@@ -15,12 +15,15 @@ abstract final class AppTheme {
       brightness: Brightness.light,
       fontFamily: AppTextStyles.fontFamily,
     );
-    final textTheme = base.textTheme
-        .apply(bodyColor: AppColors.ink, displayColor: AppColors.ink);
+    final textTheme = base.textTheme.apply(
+      bodyColor: AppColors.ink,
+      displayColor: AppColors.ink,
+    );
 
     const pillShape = StadiumBorder();
-    final buttonSize =
-        WidgetStateProperty.all(const Size.fromHeight(AppSpacing.buttonHeight));
+    final buttonSize = WidgetStateProperty.all(
+      const Size.fromHeight(AppSpacing.buttonHeight),
+    );
 
     OutlineInputBorder inputBorder(Color color, double width) =>
         OutlineInputBorder(
@@ -74,22 +77,26 @@ abstract final class AppTheme {
           minimumSize: buttonSize,
           shape: WidgetStateProperty.all(pillShape),
           textStyle: WidgetStateProperty.all(AppTextStyles.button),
-          foregroundColor: WidgetStateProperty.resolveWith((states) =>
-              states.contains(WidgetState.disabled)
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? AppColors.ink.withValues(alpha: 0.45)
+                : AppColors.ink,
+          ),
+          side: WidgetStateProperty.resolveWith(
+            (states) => BorderSide(
+              color: states.contains(WidgetState.disabled)
                   ? AppColors.ink.withValues(alpha: 0.45)
-                  : AppColors.ink),
-          side: WidgetStateProperty.resolveWith((states) => BorderSide(
-                color: states.contains(WidgetState.disabled)
-                    ? AppColors.ink.withValues(alpha: 0.45)
-                    : AppColors.ink,
-                width: 1.5,
-              )),
+                  : AppColors.ink,
+              width: 1.5,
+            ),
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           minimumSize: WidgetStateProperty.all(
-              const Size(AppSpacing.minTap, AppSpacing.minTap)),
+            const Size(AppSpacing.minTap, AppSpacing.minTap),
+          ),
           foregroundColor: WidgetStateProperty.all(AppColors.primary),
           textStyle: WidgetStateProperty.all(AppTextStyles.link),
         ),
@@ -97,8 +104,10 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 17,
+        ),
         hintStyle: AppTextStyles.input.copyWith(color: AppColors.muted),
         border: inputBorder(AppColors.inputBorder, 1.5),
         enabledBorder: inputBorder(AppColors.inputBorder, 1.5),
@@ -106,14 +115,17 @@ abstract final class AppTheme {
         errorBorder: inputBorder(AppColors.error, 2),
         focusedErrorBorder: inputBorder(AppColors.error, 2),
         disabledBorder: inputBorder(AppColors.border, 1.5),
-        errorStyle: AppTextStyles.helper
-            .copyWith(color: AppColors.error, fontWeight: FontWeight.w600),
+        errorStyle: AppTextStyles.helper.copyWith(
+          color: AppColors.error,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith((states) =>
-            states.contains(WidgetState.selected)
-                ? AppColors.primary
-                : AppColors.surface),
+        fillColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.primary
+              : AppColors.surface,
+        ),
         side: const BorderSide(color: AppColors.inputBorder, width: 1.5),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
@@ -130,35 +142,43 @@ abstract final class AppTheme {
         backgroundColor: AppColors.surfaceMuted,
         showDragHandle: false,
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.vertical(top: Radius.circular(AppRadius.sheet)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppRadius.sheet),
+          ),
         ),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.card)),
+          borderRadius: BorderRadius.circular(AppRadius.card),
+        ),
         titleTextStyle: AppTextStyles.heading,
         contentTextStyle: AppTextStyles.body,
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.surface,
         indicatorColor: AppColors.primary.withValues(alpha: 0.12),
-        labelTextStyle: WidgetStateProperty.resolveWith((states) =>
-            AppTextStyles.caption.copyWith(
-              fontWeight: FontWeight.w700,
-              color: states.contains(WidgetState.selected)
-                  ? AppColors.primary
-                  : AppColors.muted,
-            )),
-        iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
-              color: states.contains(WidgetState.selected)
-                  ? AppColors.primary
-                  : AppColors.muted,
-            )),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => AppTextStyles.caption.copyWith(
+            fontWeight: FontWeight.w700,
+            color: states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : AppColors.muted,
+          ),
+        ),
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            color: states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : AppColors.muted,
+          ),
+        ),
       ),
       dividerTheme: const DividerThemeData(
-          color: AppColors.border, thickness: 1, space: 1),
+        color: AppColors.border,
+        thickness: 1,
+        space: 1,
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppColors.primary,
         linearTrackColor: AppColors.border,

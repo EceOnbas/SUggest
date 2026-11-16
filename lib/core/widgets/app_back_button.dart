@@ -21,10 +21,15 @@ class AppBackButton extends StatelessWidget {
         tooltip: tooltip,
         onPressed: onPressed ?? () => Navigator.of(context).maybePop(),
         constraints: const BoxConstraints.tightFor(
-            width: AppSpacing.minTap, height: AppSpacing.minTap),
+          width: AppSpacing.minTap,
+          height: AppSpacing.minTap,
+        ),
         padding: EdgeInsets.zero,
-        icon: const Icon(Icons.chevron_left_rounded,
-            size: 30, color: AppColors.ink),
+        icon: const Icon(
+          Icons.chevron_left_rounded,
+          size: 30,
+          color: AppColors.ink,
+        ),
       ),
     );
   }
