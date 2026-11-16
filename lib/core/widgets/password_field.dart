@@ -17,6 +17,7 @@ class PasswordField extends StatefulWidget {
     this.showToggle = true,
     this.isNewPassword = false,
     this.errorText,
+    this.errorOutline = false,
     this.onChanged,
     this.onSubmitted,
     this.textInputAction = TextInputAction.done,
@@ -32,6 +33,9 @@ class PasswordField extends StatefulWidget {
   /// instead of filling in an old one.
   final bool isNewPassword;
   final String? errorText;
+
+  /// Red outline with no message; see [AppTextField.errorOutline].
+  final bool errorOutline;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final TextInputAction textInputAction;
@@ -53,6 +57,7 @@ class _PasswordFieldState extends State<PasswordField> {
       obscureText: !_shown,
       enabled: widget.enabled,
       errorText: widget.errorText,
+      errorOutline: widget.errorOutline,
       autocorrect: false,
       keyboardType: TextInputType.visiblePassword,
       textInputAction: widget.textInputAction,

@@ -92,6 +92,7 @@ class AppTextField extends StatefulWidget {
     this.hintText,
     this.helperText,
     this.errorText,
+    this.errorOutline = false,
     this.errorActionLabel,
     this.onErrorAction,
     this.suffix,
@@ -115,6 +116,10 @@ class AppTextField extends StatefulWidget {
   final String? hintText;
   final String? helperText;
   final String? errorText;
+
+  /// Draws the red outline without a message under the field, for when
+  /// the problem is explained elsewhere (for example the password rules).
+  final bool errorOutline;
   final String? errorActionLabel;
   final VoidCallback? onErrorAction;
   final Widget? suffix;
@@ -172,7 +177,7 @@ class _AppTextFieldState extends State<AppTextField> {
         const SizedBox(height: AppSpacing.sm),
         FieldBox(
           focused: _node.hasFocus,
-          hasError: error != null,
+          hasError: error != null || widget.errorOutline,
           enabled: widget.enabled,
           padding: widget.boxPadding,
           child: LayoutBuilder(
