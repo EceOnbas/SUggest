@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:suggest/core/theme/app_theme.dart';
 import 'package:suggest/core/widgets/state_views.dart';
@@ -13,8 +12,6 @@ Widget _host(Widget child) => MaterialApp(
     );
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   testWidgets('LoadingList shows placeholder cards with a label',
       (tester) async {
     await tester.pumpWidget(

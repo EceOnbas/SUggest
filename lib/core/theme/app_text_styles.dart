@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
 /// Schibsted Grotesk everywhere: bold titles, regular body, semibold labels.
+///
+/// The font files are bundled in assets/fonts and declared in pubspec.yaml.
 abstract final class AppTextStyles {
+  /// The font family name declared in pubspec.yaml.
+  static const fontFamily = 'Schibsted Grotesk';
+
   static TextStyle _base(double size, FontWeight weight,
           {double? height, double? letterSpacing, Color color = AppColors.ink}) =>
-      GoogleFonts.schibstedGrotesk(
+      TextStyle(
+        fontFamily: fontFamily,
         fontSize: size,
         fontWeight: weight,
         height: height,

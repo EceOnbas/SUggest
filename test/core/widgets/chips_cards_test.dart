@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:suggest/core/theme/app_colors.dart';
 import 'package:suggest/core/theme/app_theme.dart';
@@ -17,8 +16,6 @@ Widget _host(Widget child) => MaterialApp(
     );
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   testWidgets('ChipFilterRow marks the picked chip', (tester) async {
     var selected = 'All';
     await tester.pumpWidget(_host(StatefulBuilder(

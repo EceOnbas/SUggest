@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:suggest/core/theme/app_theme.dart';
 import 'package:suggest/core/widgets/app_back_button.dart';
@@ -14,8 +13,6 @@ Widget _host(Widget child) => MaterialApp(
     );
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   testWidgets('PrimaryButton calls onPressed and is 56 tall', (tester) async {
     var taps = 0;
     await tester.pumpWidget(

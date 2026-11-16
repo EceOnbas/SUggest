@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:suggest/core/theme/app_colors.dart';
 import 'package:suggest/core/theme/app_theme.dart';
@@ -25,8 +24,6 @@ Color _outline(WidgetTester tester) {
 }
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   group('SuEmail', () {
     test('builds the full address from the typed name', () {
       expect(SuEmail.full(' Beren.Guler '), 'beren.guler@sabanciuniv.edu');

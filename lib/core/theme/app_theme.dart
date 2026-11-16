@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 import 'app_spacing.dart';
@@ -11,8 +10,12 @@ import 'app_text_styles.dart';
 /// the design.
 abstract final class AppTheme {
   static ThemeData get light {
-    final base = ThemeData(useMaterial3: true, brightness: Brightness.light);
-    final textTheme = GoogleFonts.schibstedGroteskTextTheme(base.textTheme)
+    final base = ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      fontFamily: AppTextStyles.fontFamily,
+    );
+    final textTheme = base.textTheme
         .apply(bodyColor: AppColors.ink, displayColor: AppColors.ink);
 
     const pillShape = StadiumBorder();
