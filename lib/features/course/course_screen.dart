@@ -10,7 +10,10 @@ import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/state_views.dart';
 import '../../data/course_repository.dart';
 import '../../models/course.dart';
+import '../../models/review.dart';
 import 'overview_tab.dart';
+import 'review_filter.dart';
+import 'reviews_tab.dart';
 import 'sections_tab.dart';
 import 'widgets/course_header.dart';
 import 'widgets/course_tab_bar.dart';
@@ -39,8 +42,13 @@ class CourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<CourseScreen> {
   late Future<Course> _course;
+  late Future<List<Review>> _reviews;
   CourseTab _tab = CourseTab.overview;
+  ReviewFilter _filter = const ReviewFilter();
   bool _saved = false;
+
+  /// Side padding of the page.
+  static const _gutter = EdgeInsets.symmetric(horizontal: 20);
 
   @override
   void initState() {
@@ -50,6 +58,11 @@ class _CourseScreenState extends State<CourseScreen> {
 
   void _load() {
     _course = widget.repository.fetchCourse(widget.courseCode);
+    _loadReviews();
+  }
+
+  void _loadReviews() {
+    _reviews = widget.repository.fetchReviews(widget.courseCode);
   }
 
   void _toggleSaved() {
@@ -84,12 +97,22 @@ class _CourseScreenState extends State<CourseScreen> {
             child: ErrorState(onRetry: () => setState(_load)),
           );
         }
-        return _buildPage(context, snapshot.requireData);
+        final course = snapshot.requireData;
+        // The reviews load on their own, so the page does not wait for
+        // them.
+        return FutureBuilder<List<Review>>(
+          future: _reviews,
+          builder: (context, reviews) => _buildPage(context, course, reviews),
+        );
       },
     );
   }
 
-  Widget _buildPage(BuildContext context, Course course) {
+  Widget _buildPage(
+    BuildContext context,
+    Course course,
+    AsyncSnapshot<List<Review>> reviews,
+  ) {
     // The tab bar is 48 px tall and grows with the user's text size.
     final tabBarHeight =
         math.max(48.0, MediaQuery.textScalerOf(context).scale(16) * 1.2 + 20) +
@@ -113,13 +136,14 @@ class _CourseScreenState extends State<CourseScreen> {
                 height: tabBarHeight,
                 child: CourseTabBar(
                   selected: _tab,
+                  reviewCount: reviews.data?.length,
                   onSelected: (tab) => setState(() => _tab = tab),
                 ),
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
-              sliver: SliverToBoxAdapter(child: _buildTab(course)),
+              padding: const EdgeInsets.only(top: 24, bottom: 32),
+              sliver: SliverToBoxAdapter(child: _buildTab(course, reviews)),
             ),
           ],
         ),
@@ -128,11 +152,42 @@ class _CourseScreenState extends State<CourseScreen> {
     );
   }
 
-  Widget _buildTab(Course course) => switch (_tab) {
-    CourseTab.overview => OverviewTab(course: course),
-    CourseTab.sections => SectionsTab(course: course),
-    CourseTab.reviews => const EmptyState(title: 'Reviews'),
-  };
+  Widget _buildTab(Course course, AsyncSnapshot<List<Review>> reviews) {
+    switch (_tab) {
+      case CourseTab.overview:
+        return Padding(
+          padding: _gutter,
+          child: OverviewTab(course: course),
+        );
+      case CourseTab.sections:
+        return Padding(
+          padding: _gutter,
+          child: SectionsTab(course: course),
+        );
+      case CourseTab.reviews:
+        if (reviews.connectionState != ConnectionState.done) {
+          return const Padding(
+            padding: _gutter,
+            child: LoadingList(label: 'Loading reviews'),
+          );
+        }
+        if (reviews.hasError) {
+          return Padding(
+            padding: _gutter,
+            child: ErrorState(
+              title: "Couldn't load reviews",
+              onRetry: () => setState(_loadReviews),
+            ),
+          );
+        }
+        // The chip row runs edge to edge, so this tab pads itself.
+        return ReviewsTab(
+          reviews: reviews.requireData,
+          filter: _filter,
+          onFilterChanged: (filter) => setState(() => _filter = filter),
+        );
+    }
+  }
 }
 
 /// A plain page with a back arrow, used while the course loads or when it

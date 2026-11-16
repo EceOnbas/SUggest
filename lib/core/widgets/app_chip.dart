@@ -43,17 +43,19 @@ class AppChip extends StatelessWidget {
           child: Container(
             constraints: BoxConstraints(minHeight: height),
             padding: EdgeInsets.symmetric(horizontal: compact ? 14 : 16),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  label,
-                  style: AppTextStyles.link.copyWith(
-                    color: selected ? AppColors.onPrimary : AppColors.ink,
-                    fontWeight: compact ? FontWeight.w600 : FontWeight.w700,
-                  ),
+            // As wide as its label. On a very narrow screen the label
+            // wraps onto a second line instead of overflowing.
+            child: Align(
+              widthFactor: 1,
+              heightFactor: 1,
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.link.copyWith(
+                  color: selected ? AppColors.onPrimary : AppColors.ink,
+                  fontWeight: compact ? FontWeight.w600 : FontWeight.w700,
                 ),
-              ],
+              ),
             ),
           ),
         ),
