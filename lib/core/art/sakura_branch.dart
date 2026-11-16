@@ -43,6 +43,8 @@ class SakuraBranch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Clip like the design's SVG box, so twigs never draw over
+    // neighbouring widgets.
     final painting = CustomPaint(
       size: Size.infinite,
       painter: _SakuraPainter(
@@ -54,9 +56,10 @@ class SakuraBranch extends StatelessWidget {
         flowerScale: flowerScale,
       ),
     );
+    final clipped = ClipRect(child: painting);
     return semanticLabel == null
-        ? ExcludeSemantics(child: painting)
-        : Semantics(label: semanticLabel, image: true, child: painting);
+        ? ExcludeSemantics(child: clipped)
+        : Semantics(label: semanticLabel, image: true, child: clipped);
   }
 }
 
