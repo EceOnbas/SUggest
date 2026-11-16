@@ -11,6 +11,7 @@ import '../../core/widgets/state_views.dart';
 import '../../data/course_repository.dart';
 import '../../models/course.dart';
 import 'overview_tab.dart';
+import 'sections_tab.dart';
 import 'widgets/course_header.dart';
 import 'widgets/course_tab_bar.dart';
 
@@ -129,7 +130,7 @@ class _CourseScreenState extends State<CourseScreen> {
 
   Widget _buildTab(Course course) => switch (_tab) {
     CourseTab.overview => OverviewTab(course: course),
-    CourseTab.sections => const EmptyState(title: 'Sections'),
+    CourseTab.sections => SectionsTab(course: course),
     CourseTab.reviews => const EmptyState(title: 'Reviews'),
   };
 }

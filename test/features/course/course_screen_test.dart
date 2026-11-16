@@ -131,4 +131,35 @@ void main() {
     );
     expect(find.text('Sections').hitTestable(), findsOneWidget);
   });
+
+  testWidgets('Sections shows each section and its linked lab', (tester) async {
+    await openCourse(tester);
+    await tapText(tester, 'Sections');
+    expect(find.text('Fall 2026 sections'), findsOneWidget);
+    expect(find.text('Section A'), findsOneWidget);
+    expect(find.text('Section B'), findsOneWidget);
+    expect(
+      find.text('Lecture Mon 10:40, Wed 10:40', findRichText: true),
+      findsOneWidget,
+    );
+    expect(find.text('Lab B1 Fri 10:40', findRichText: true), findsOneWidget);
+    expect(find.textContaining('CRN 10234.'), findsOneWidget);
+    // The Overview is gone.
+    expect(find.text('Who takes it'), findsNothing);
+  });
+
+  testWidgets('Sections lists instructor ratings by term', (tester) async {
+    await openCourse(tester);
+    await tapText(tester, 'Sections');
+    expect(find.text('Instructor rating by term'), findsOneWidget);
+    expect(find.text('Spring 2026, 12 ratings'), findsOneWidget);
+    expect(find.text('Spring 2025, 7 ratings'), findsOneWidget);
+    expect(find.text('3.4'), findsOneWidget);
+  });
+
+  testWidgets('a course with no sections says so', (tester) async {
+    await openCourse(tester, code: 'CS 204');
+    await tapText(tester, 'Sections');
+    expect(find.text('No sections this term'), findsOneWidget);
+  });
 }
