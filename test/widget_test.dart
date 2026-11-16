@@ -1,11 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:suggest/app.dart';
-import 'package:suggest/features/shell/main_shell.dart';
+import 'package:suggest/features/auth/welcome_screen.dart';
+import 'package:suggest/services/fake_auth_service.dart';
 
 void main() {
-  testWidgets('app starts', (tester) async {
-    await tester.pumpWidget(const SUggestApp());
-    expect(find.byType(MainShell), findsOneWidget);
+  testWidgets('app starts on Welcome when no one is signed in', (tester) async {
+    await tester.pumpWidget(
+      SUggestApp(auth: FakeAuthService(delay: Duration.zero)),
+    );
+    expect(find.byType(WelcomeScreen), findsOneWidget);
   });
 }

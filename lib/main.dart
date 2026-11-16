@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'app.dart';
+import 'services/fake_auth_service.dart';
 
 void main() {
-  runApp(const SUggestApp());
+  runApp(SUggestApp(auth: FakeAuthService()));
 }

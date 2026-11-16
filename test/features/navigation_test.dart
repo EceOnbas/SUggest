@@ -4,12 +4,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:suggest/core/routes/app_routes.dart';
 import 'package:suggest/core/theme/app_theme.dart';
 import 'package:suggest/features/shell/main_shell.dart';
+import 'package:suggest/services/auth_service.dart';
+import 'package:suggest/services/fake_auth_service.dart';
 
-Widget _app() => MaterialApp(
-  theme: AppTheme.light,
-  initialRoute: AppRoutes.home,
-  routes: AppRoutes.table,
-  onGenerateRoute: AppRoutes.onGenerateRoute,
+Widget _app() => AuthScope(
+  service: FakeAuthService(delay: Duration.zero),
+  child: MaterialApp(
+    theme: AppTheme.light,
+    initialRoute: AppRoutes.home,
+    routes: AppRoutes.table,
+    onGenerateRoute: AppRoutes.onGenerateRoute,
+  ),
 );
 
 void main() {

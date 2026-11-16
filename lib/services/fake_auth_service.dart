@@ -45,7 +45,11 @@ class FakeAuthService extends AuthService {
     return AuthStatus.ready;
   }
 
-  Future<void> _wait() => Future<void>.delayed(delay);
+  /// Pretends to wait for the network. A zero delay (used in tests)
+  /// returns at once without starting a timer.
+  Future<void> _wait() async {
+    if (delay > Duration.zero) await Future<void>.delayed(delay);
+  }
 
   @override
   Future<void> logIn({
