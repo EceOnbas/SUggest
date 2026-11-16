@@ -4,10 +4,11 @@ import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_toast.dart';
 import '../../models/user_profile.dart';
 import '../../services/auth_service.dart';
+import 'all_set_screen.dart';
 import 'courses_step.dart';
+import 'exchange_step.dart';
 import 'profile_intro_screen.dart';
 import 'program_step.dart';
-import 'widgets/setup_step_scaffold.dart';
 import 'year_step.dart';
 
 /// The screens of profile setup, in order.
@@ -64,11 +65,10 @@ class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
 
   @override
   Widget build(BuildContext context) {
-    final onFirstOrLast = _step == SetupStep.intro || _step == SetupStep.allSet;
     return PopScope(
       // The phone's back gesture goes to the previous step, not out of
       // setup.
-      canPop: onFirstOrLast,
+      canPop: _step == SetupStep.intro,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) _back();
       },
@@ -105,14 +105,15 @@ class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
         onContinue: _saveAndNext,
         onSkip: _next,
       ),
-      // Exchange and "You're all set" are added in the next commit.
-      _ => SetupStepScaffold(
-        step: _step.index.clamp(1, SetupStepScaffold.totalSteps),
-        title: 'Coming soon',
+      SetupStep.exchange => ExchangeStep(
+        profile: _draft,
         onBack: _back,
-        onPrimary: () => _step == SetupStep.allSet ? _finish(_draft) : _next(),
-        onSkip: () => _step == SetupStep.allSet ? _finish(_draft) : _next(),
-        child: const SizedBox.shrink(),
+        onContinue: _saveAndNext,
+        onSkip: _next,
+      ),
+      SetupStep.allSet => AllSetScreen(
+        saving: _saving,
+        onStart: () => _finish(_draft),
       ),
     };
   }
