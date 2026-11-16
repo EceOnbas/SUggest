@@ -175,46 +175,57 @@ class _AppTextFieldState extends State<AppTextField> {
           hasError: error != null,
           enabled: widget.enabled,
           padding: widget.boxPadding,
-          child: Row(
-            children: [
-              Expanded(
-                child: Semantics(
-                  label: widget.label,
-                  child: TextField(
-                    controller: widget.controller,
-                    focusNode: _node,
-                    enabled: widget.enabled,
-                    obscureText: widget.obscureText,
-                    keyboardType: widget.keyboardType,
-                    textInputAction: widget.textInputAction,
-                    textCapitalization: widget.textCapitalization,
-                    autocorrect: widget.autocorrect,
-                    enableSuggestions: widget.autocorrect,
-                    autofillHints: widget.autofillHints,
-                    inputFormatters: widget.inputFormatters,
-                    onChanged: widget.onChanged,
-                    onSubmitted: widget.onSubmitted,
-                    style: AppTextStyles.input,
-                    cursorColor: AppColors.primary,
-                    // The outline is drawn by FieldBox, so the TextField
-                    // itself has no border or fill.
-                    decoration: InputDecoration(
-                      isCollapsed: true,
-                      contentPadding: EdgeInsets.zero,
-                      filled: false,
-                      hintText: widget.hintText,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
+          child: LayoutBuilder(
+            builder: (context, box) => Row(
+              children: [
+                Expanded(
+                  child: Semantics(
+                    label: widget.label,
+                    child: TextField(
+                      controller: widget.controller,
+                      focusNode: _node,
+                      enabled: widget.enabled,
+                      obscureText: widget.obscureText,
+                      keyboardType: widget.keyboardType,
+                      textInputAction: widget.textInputAction,
+                      textCapitalization: widget.textCapitalization,
+                      autocorrect: widget.autocorrect,
+                      enableSuggestions: widget.autocorrect,
+                      autofillHints: widget.autofillHints,
+                      inputFormatters: widget.inputFormatters,
+                      onChanged: widget.onChanged,
+                      onSubmitted: widget.onSubmitted,
+                      style: AppTextStyles.input,
+                      cursorColor: AppColors.primary,
+                      // The outline is drawn by FieldBox, so the TextField
+                      // itself has no border or fill.
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.zero,
+                        filled: false,
+                        hintText: widget.hintText,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedErrorBorder: InputBorder.none,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (widget.suffix != null) widget.suffix!,
-            ],
+                if (widget.suffix != null)
+                  // On a very narrow screen or with very large text, the
+                  // suffix (for example @sabanciuniv.edu) may shrink and fade,
+                  // but the typing area always keeps at least 80 px.
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: (box.maxWidth - 80).clamp(0, 1e9),
+                    ),
+                    child: widget.suffix,
+                  ),
+              ],
+            ),
           ),
         ),
         if (error != null) ...[

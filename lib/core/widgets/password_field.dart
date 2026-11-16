@@ -12,6 +12,7 @@ class PasswordField extends StatefulWidget {
   const PasswordField({
     super.key,
     this.controller,
+    this.focusNode,
     this.label = 'Password',
     this.showToggle = true,
     this.isNewPassword = false,
@@ -23,6 +24,7 @@ class PasswordField extends StatefulWidget {
   });
 
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final String label;
   final bool showToggle;
 
@@ -47,6 +49,7 @@ class _PasswordFieldState extends State<PasswordField> {
     return AppTextField(
       label: widget.label,
       controller: widget.controller,
+      focusNode: widget.focusNode,
       obscureText: !_shown,
       enabled: widget.enabled,
       errorText: widget.errorText,

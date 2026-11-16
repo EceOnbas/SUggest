@@ -16,6 +16,7 @@ class SuEmailField extends StatefulWidget {
   const SuEmailField({
     super.key,
     required this.controller,
+    this.focusNode,
     this.label = 'SU email',
     this.errorText,
     this.errorActionLabel,
@@ -27,6 +28,7 @@ class SuEmailField extends StatefulWidget {
   });
 
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final String label;
   final String? errorText;
   final String? errorActionLabel;
@@ -69,6 +71,7 @@ class _SuEmailFieldState extends State<SuEmailField> {
     return AppTextField(
       label: widget.label,
       controller: widget.controller,
+      focusNode: widget.focusNode,
       hintText: 'name.surname',
       enabled: widget.enabled,
       errorText: showOwnError ? SuEmail.wrongDomainMessage : widget.errorText,
@@ -85,6 +88,9 @@ class _SuEmailFieldState extends State<SuEmailField> {
         child: Text(
           SuEmail.domain,
           style: AppTextStyles.input.copyWith(color: AppColors.muted),
+          maxLines: 1,
+          softWrap: false,
+          overflow: TextOverflow.fade,
         ),
       ),
     );
