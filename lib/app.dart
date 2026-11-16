@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/dismiss_keyboard_on_tap.dart';
 import 'services/auth_service.dart';
 
 class SUggestApp extends StatelessWidget {
@@ -22,6 +23,9 @@ class SUggestApp extends StatelessWidget {
         initialRoute: AppRoutes.start,
         routes: AppRoutes.table,
         onGenerateRoute: AppRoutes.onGenerateRoute,
+        // Tapping empty space closes the keyboard on every screen.
+        builder: (context, child) =>
+            DismissKeyboardOnTap(child: child ?? const SizedBox.shrink()),
       ),
     );
   }
