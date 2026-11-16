@@ -45,31 +45,10 @@ Future<bool> showConfirmDialog({
               style: AppTextStyles.body.copyWith(color: AppColors.muted),
             ),
             const SizedBox(height: 20),
-            // The two buttons share the width; with very large text they
-            // stack so neither label is cut.
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              alignment: WrapAlignment.end,
-              children: [
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(120, 52),
-                    textStyle: AppTextStyles.button.copyWith(fontSize: 16),
-                  ),
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(cancelLabel),
-                ),
-                FilledButton(
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size(120, 52),
-                    backgroundColor: destructive ? AppColors.error : null,
-                    textStyle: AppTextStyles.button.copyWith(fontSize: 16),
-                  ),
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(confirmLabel),
-                ),
-              ],
+            _DialogButtons(
+              cancelLabel: cancelLabel,
+              confirmLabel: confirmLabel,
+              destructive: destructive,
             ),
           ],
         ),
@@ -77,4 +56,54 @@ Future<bool> showConfirmDialog({
     ),
   );
   return confirmed ?? false;
+}
+
+/// The two dialog buttons: side by side with equal widths, or stacked
+/// when the text is very large so neither label is cut.
+class _DialogButtons extends StatelessWidget {
+  const _DialogButtons({
+    required this.cancelLabel,
+    required this.confirmLabel,
+    required this.destructive,
+  });
+
+  final String cancelLabel;
+  final String confirmLabel;
+  final bool destructive;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = AppTextStyles.button.copyWith(fontSize: 16);
+    final cancel = OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size.fromHeight(52),
+        textStyle: textStyle,
+      ),
+      onPressed: () => Navigator.pop(context, false),
+      child: Text(cancelLabel),
+    );
+    final confirm = FilledButton(
+      style: FilledButton.styleFrom(
+        minimumSize: const Size.fromHeight(52),
+        backgroundColor: destructive ? AppColors.error : null,
+        textStyle: textStyle,
+      ),
+      onPressed: () => Navigator.pop(context, true),
+      child: Text(confirmLabel),
+    );
+    final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.3;
+    if (largeText) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [confirm, const SizedBox(height: 10), cancel],
+      );
+    }
+    return Row(
+      children: [
+        Expanded(child: cancel),
+        const SizedBox(width: 10),
+        Expanded(child: confirm),
+      ],
+    );
+  }
 }
