@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/art/sakura_branch.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/app_back_button.dart';
@@ -49,13 +50,17 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
           padding: AppSpacing.pagePadding,
           children: [
             const Align(
-                alignment: Alignment.centerLeft, child: AppBackButton()),
+              alignment: Alignment.centerLeft,
+              child: AppBackButton(),
+            ),
             Text('SUggest', style: AppTextStyles.wordmark),
             const SizedBox(height: AppSpacing.md),
             Text('Shared widgets', style: AppTextStyles.title),
             const SizedBox(height: AppSpacing.sm),
-            Text('Buttons and inputs used on every screen.',
-                style: AppTextStyles.lead),
+            Text(
+              'Buttons and inputs used on every screen.',
+              style: AppTextStyles.lead,
+            ),
             const SizedBox(height: AppSpacing.xl),
             SuEmailField(controller: _email),
             gap,
@@ -99,10 +104,51 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
             const AppTextField(label: 'Host university', optional: true),
             gap,
             const NoteBox.info(
-                "Can't find it? Look in Junk or Spam. The email comes from SUggest."),
+              "Can't find it? Look in Junk or Spam. The email comes from SUggest.",
+            ),
             gap,
             const NoteBox.error(
-                'Not verified yet. Open the email from SUggest, tap the link, then try again.'),
+              'Not verified yet. Open the email from SUggest, tap the link, then try again.',
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Text('Sakura branches', style: AppTextStyles.heading),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'Easy and light, then CS 310, then hard, strict and heavy.',
+              style: AppTextStyles.bodySmall,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            const SizedBox(
+              height: 150,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SakuraBranch(
+                      seed: 'HUM 201',
+                      difficulty: 1.4,
+                      workload: 1.5,
+                      attendance: 1.5,
+                    ),
+                  ),
+                  Expanded(
+                    child: SakuraBranch(
+                      seed: 'CS 310',
+                      difficulty: 3.6,
+                      workload: 4.2,
+                      attendance: 2.1,
+                    ),
+                  ),
+                  Expanded(
+                    child: SakuraBranch(
+                      seed: 'MATH 201',
+                      difficulty: 4.8,
+                      workload: 4.6,
+                      attendance: 4.8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: AppSpacing.xl),
             Text('Chips and cards', style: AppTextStyles.heading),
             const SizedBox(height: AppSpacing.md),
@@ -114,7 +160,7 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
                 'Difficulty',
                 'Instructor',
                 'Attendance',
-                'Workload'
+                'Workload',
               ],
               selected: _topic,
               onSelected: (value) => setState(() => _topic = value),
@@ -124,45 +170,60 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Spring 2026, Instructor A',
-                      style: AppTextStyles.helper),
+                  Text(
+                    'Spring 2026, Instructor A',
+                    style: AppTextStyles.helper,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                      'The team project is most of the grade, so pick your group early.',
-                      style: AppTextStyles.body),
+                    'The team project is most of the grade, so pick your group early.',
+                    style: AppTextStyles.body,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
-                  const Wrap(spacing: 6, runSpacing: 6, children: [
-                    TagChip('Workload'),
-                    TagChip('Attendance'),
-                    TagChip.topic('Group project'),
-                  ]),
+                  const Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      TagChip('Workload'),
+                      TagChip('Attendance'),
+                      TagChip.topic('Group project'),
+                    ],
+                  ),
                 ],
               ),
             ),
             gap,
-            Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.sm, children: [
-              AppChip(label: 'CS 204', compact: true, onTap: () {}),
-              AppChip(
-                label: 'Open sheet',
-                onTap: () => showAppBottomSheet<void>(
-                  context: context,
-                  title: 'Filter reviews',
-                  builder: (context) => PrimaryButton(
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                AppChip(label: 'CS 204', compact: true, onTap: () {}),
+                AppChip(
+                  label: 'Open sheet',
+                  onTap: () => showAppBottomSheet<void>(
+                    context: context,
+                    title: 'Filter reviews',
+                    builder: (context) => PrimaryButton(
                       label: 'Show 4 reviews',
-                      onPressed: () => Navigator.pop(context)),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                 ),
-              ),
-              AppChip(
-                label: 'Show toast',
-                onTap: () => AppToast.show(
-                    context, 'Review submitted successfully.'),
-              ),
-              AppChip(
-                label: 'Error toast',
-                onTap: () => AppToast.show(context, 'Failed to save changes.',
-                    isError: true),
-              ),
-            ]),
+                AppChip(
+                  label: 'Show toast',
+                  onTap: () =>
+                      AppToast.show(context, 'Review submitted successfully.'),
+                ),
+                AppChip(
+                  label: 'Error toast',
+                  onTap: () => AppToast.show(
+                    context,
+                    'Failed to save changes.',
+                    isError: true,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: AppSpacing.xl),
             Text('Loading, empty and error', style: AppTextStyles.heading),
             const SizedBox(height: AppSpacing.md),
@@ -181,10 +242,13 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
             const SizedBox(height: AppSpacing.md),
             const PrimaryButton(label: 'Faded until valid', onPressed: null),
             PromptLink(
-                prompt: 'New here?',
-                linkLabel: 'Create account',
-                onPressed: () {}),
-            Center(child: TextLink(label: 'Skip for now', onPressed: () {})),
+              prompt: 'New here?',
+              linkLabel: 'Create account',
+              onPressed: () {},
+            ),
+            Center(
+              child: TextLink(label: 'Skip for now', onPressed: () {}),
+            ),
           ],
         ),
       ),
