@@ -4,6 +4,7 @@ import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_toast.dart';
 import '../../models/user_profile.dart';
 import '../../services/auth_service.dart';
+import 'courses_step.dart';
 import 'profile_intro_screen.dart';
 import 'program_step.dart';
 import 'widgets/setup_step_scaffold.dart';
@@ -98,8 +99,13 @@ class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
         onContinue: _saveAndNext,
         onSkip: _next,
       ),
-      // Courses, exchange and "You're all set" are added in the next
-      // commits.
+      SetupStep.courses => CoursesStep(
+        profile: _draft,
+        onBack: _back,
+        onContinue: _saveAndNext,
+        onSkip: _next,
+      ),
+      // Exchange and "You're all set" are added in the next commit.
       _ => SetupStepScaffold(
         step: _step.index.clamp(1, SetupStepScaffold.totalSteps),
         title: 'Coming soon',

@@ -106,3 +106,35 @@ class AppDropdownField<T> extends StatelessWidget {
     );
   }
 }
+
+/// [AppDropdownField] as a form field: put it inside a [Form] and give
+/// it a [validator]. Its error shows under the field when the form is
+/// validated, and `Form.reset()` clears the choice.
+class AppDropdownFormField<T> extends FormField<T> {
+  AppDropdownFormField({
+    super.key,
+    required String label,
+    required List<T> items,
+    String Function(T item)? itemLabel,
+    String? hintText,
+    bool optional = false,
+    super.initialValue,
+    super.validator,
+    super.onSaved,
+    ValueChanged<T?>? onChanged,
+  }) : super(
+         builder: (state) => AppDropdownField<T>(
+           label: label,
+           items: items,
+           itemLabel: itemLabel,
+           hintText: hintText,
+           optional: optional,
+           value: state.value,
+           errorText: state.errorText,
+           onChanged: (value) {
+             state.didChange(value);
+             onChanged?.call(value);
+           },
+         ),
+       );
+}
