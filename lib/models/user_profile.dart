@@ -26,6 +26,51 @@ class UserProfile {
   /// Null when the student has not been on exchange.
   final ExchangeInfo? exchange;
 
+  /// A copy with the program step's answers. Unlike [copyWith], a null
+  /// here clears the field (the user picked "None").
+  UserProfile withProgram({
+    String? major,
+    String? doubleMajor,
+    String? minor,
+  }) => UserProfile(
+    major: major,
+    doubleMajor: doubleMajor,
+    minor: minor,
+    classYear: classYear,
+    currentTerm: currentTerm,
+    startTerm: startTerm,
+    coursesTaken: coursesTaken,
+    exchange: exchange,
+  );
+
+  /// A copy with the year step's answers.
+  UserProfile withYear({
+    String? classYear,
+    String? currentTerm,
+    String? startTerm,
+  }) => UserProfile(
+    major: major,
+    doubleMajor: doubleMajor,
+    minor: minor,
+    classYear: classYear,
+    currentTerm: currentTerm,
+    startTerm: startTerm,
+    coursesTaken: coursesTaken,
+    exchange: exchange,
+  );
+
+  /// A copy with the exchange step's answer; null means "Not yet".
+  UserProfile withExchange(ExchangeInfo? exchange) => UserProfile(
+    major: major,
+    doubleMajor: doubleMajor,
+    minor: minor,
+    classYear: classYear,
+    currentTerm: currentTerm,
+    startTerm: startTerm,
+    coursesTaken: coursesTaken,
+    exchange: exchange,
+  );
+
   UserProfile copyWith({
     String? major,
     String? doubleMajor,

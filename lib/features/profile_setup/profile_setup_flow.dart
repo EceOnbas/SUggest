@@ -5,7 +5,9 @@ import '../../core/widgets/app_toast.dart';
 import '../../models/user_profile.dart';
 import '../../services/auth_service.dart';
 import 'profile_intro_screen.dart';
+import 'program_step.dart';
 import 'widgets/setup_step_scaffold.dart';
+import 'year_step.dart';
 
 /// The screens of profile setup, in order.
 enum SetupStep { intro, program, year, courses, exchange, allSet }
@@ -24,7 +26,7 @@ class ProfileSetupFlow extends StatefulWidget {
 
 class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
   SetupStep _step = SetupStep.intro;
-  final UserProfile _draft = const UserProfile();
+  UserProfile _draft = const UserProfile();
   bool _saving = false;
 
   void _goTo(SetupStep step) => setState(() => _step = step);
@@ -32,6 +34,12 @@ class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
   void _next() => _goTo(SetupStep.values[_step.index + 1]);
 
   void _back() => _goTo(SetupStep.values[_step.index - 1]);
+
+  /// Keeps a step's answers and moves on.
+  void _saveAndNext(UserProfile updated) {
+    _draft = updated;
+    _next();
+  }
 
   /// Saves [profile] and lets the auth gate open Home.
   Future<void> _finish(UserProfile profile) async {
@@ -78,7 +86,20 @@ class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
         // Skip for now saves an empty profile, so Home opens next time.
         onSkip: () => _finish(const UserProfile()),
       ),
-      // The four steps and "You're all set" are added in the next commits.
+      SetupStep.program => ProgramStep(
+        profile: _draft,
+        onBack: _back,
+        onContinue: _saveAndNext,
+        onSkip: _next,
+      ),
+      SetupStep.year => YearStep(
+        profile: _draft,
+        onBack: _back,
+        onContinue: _saveAndNext,
+        onSkip: _next,
+      ),
+      // Courses, exchange and "You're all set" are added in the next
+      // commits.
       _ => SetupStepScaffold(
         step: _step.index.clamp(1, SetupStepScaffold.totalSteps),
         title: 'Coming soon',
