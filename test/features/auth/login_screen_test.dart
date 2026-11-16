@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:suggest/core/routes/app_routes.dart';
 import 'package:suggest/core/theme/app_theme.dart';
+import 'package:suggest/core/widgets/app_back_button.dart';
 import 'package:suggest/features/auth/forgot_password_screen.dart';
 import 'package:suggest/features/auth/login_screen.dart';
 import 'package:suggest/features/auth/sign_up_screen.dart';
@@ -83,7 +84,7 @@ void main() {
     await tester.tap(find.text('Forgot password?'));
     await tester.pumpAndSettle();
     expect(find.byType(ForgotPasswordScreen), findsOneWidget);
-    await tester.pageBack();
+    await tester.tap(find.byType(AppBackButton));
     await tester.pumpAndSettle();
 
     await tester.ensureVisible(

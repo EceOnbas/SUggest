@@ -4,6 +4,7 @@ import '../../features/auth/auth_gate.dart';
 import '../../features/auth/check_inbox_screen.dart';
 import '../../features/auth/forgot_password_screen.dart';
 import '../../features/auth/login_screen.dart';
+import '../../features/auth/reset_link_sent_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/course/course_screen.dart';
 import '../../features/dev/widget_gallery_screen.dart';
@@ -22,6 +23,9 @@ abstract final class AppRoutes {
   static const signUp = '/sign-up';
   static const checkInbox = '/check-inbox';
   static const forgotPassword = '/forgot-password';
+
+  /// Takes the full email address as its argument.
+  static const resetLinkSent = '/reset-link-sent';
   static const profileSetup = '/profile-setup';
   static const home = '/home';
   static const course = '/course';
@@ -51,6 +55,13 @@ abstract final class AppRoutes {
       return MaterialPageRoute<void>(
         settings: settings,
         builder: (_) => CourseScreen(courseCode: code),
+      );
+    }
+    if (settings.name == resetLinkSent) {
+      final email = settings.arguments as String? ?? 'your SU email';
+      return MaterialPageRoute<void>(
+        settings: settings,
+        builder: (_) => ResetLinkSentScreen(email: email),
       );
     }
     return null;
