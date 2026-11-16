@@ -56,6 +56,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Local images. Flutter picks the 2.0x / 3.0x copy that fits the screen.
+  assets:
+    - assets/images/
+
   # Schibsted Grotesk, bundled so the app needs no internet for its font.
   # Licence: assets/fonts/OFL.txt (SIL Open Font License 1.1).
   fonts:

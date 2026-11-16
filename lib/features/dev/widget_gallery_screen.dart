@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/art/onigiri.dart';
 import '../../core/art/sakura_branch.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -148,6 +149,17 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Text('Onigiri', style: AppTextStyles.heading),
+            const SizedBox(height: AppSpacing.md),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Onigiri(pose: OnigiriPose.hello, size: 96),
+                Onigiri(pose: OnigiriPose.sweep, size: 96),
+                Onigiri(pose: OnigiriPose.done, size: 96),
+              ],
             ),
             const SizedBox(height: AppSpacing.xl),
             Text('Chips and cards', style: AppTextStyles.heading),
