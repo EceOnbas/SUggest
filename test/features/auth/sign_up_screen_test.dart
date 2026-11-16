@@ -157,4 +157,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('fits with large text', (tester) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _open(tester, size: const Size(375, 667));
+    await _fill(tester, repeat: 'other1234');
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }

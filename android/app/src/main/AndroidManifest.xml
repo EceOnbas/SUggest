@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Needed to load network images such as the Welcome photo. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="suggest"
+        android:label="SUggest"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

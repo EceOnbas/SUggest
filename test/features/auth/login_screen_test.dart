@@ -99,4 +99,12 @@ void main() {
     await _tapLogIn(tester);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('fits with large text', (tester) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _open(tester, size: const Size(375, 667));
+    await _tapLogIn(tester);
+    expect(tester.takeException(), isNull);
+  });
 }
