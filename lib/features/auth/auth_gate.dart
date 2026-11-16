@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
-import '../profile_setup/profile_intro_screen.dart';
+import '../profile_setup/profile_setup_flow.dart';
 import '../shell/main_shell.dart';
 import 'check_inbox_screen.dart';
 import 'welcome_screen.dart';
@@ -25,7 +25,7 @@ class AuthGate extends StatelessWidget {
     return switch (AuthScope.of(context).status) {
       AuthStatus.signedOut => const WelcomeScreen(),
       AuthStatus.unverified => const CheckInboxScreen(),
-      AuthStatus.needsProfile => const ProfileIntroScreen(),
+      AuthStatus.needsProfile => const ProfileSetupFlow(),
       AuthStatus.ready => const MainShell(),
     };
   }

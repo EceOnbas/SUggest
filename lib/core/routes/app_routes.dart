@@ -8,7 +8,7 @@ import '../../features/auth/reset_link_sent_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/course/course_screen.dart';
 import '../../features/dev/widget_gallery_screen.dart';
-import '../../features/profile_setup/profile_intro_screen.dart';
+import '../../features/profile_setup/profile_setup_flow.dart';
 import '../../features/shell/main_shell.dart';
 
 /// Every screen's route name, in one place.
@@ -38,7 +38,7 @@ abstract final class AppRoutes {
     signUp: (_) => const SignUpScreen(),
     checkInbox: (_) => const CheckInboxScreen(),
     forgotPassword: (_) => const ForgotPasswordScreen(),
-    profileSetup: (_) => const ProfileIntroScreen(),
+    profileSetup: (_) => const ProfileSetupFlow(),
     home: (_) => const MainShell(),
     gallery: (_) => const WidgetGalleryScreen(),
   };

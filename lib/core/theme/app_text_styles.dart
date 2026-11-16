@@ -32,6 +32,10 @@ abstract final class AppTextStyles {
   static TextStyle get title =>
       _base(34, FontWeight.w800, height: 1.05, letterSpacing: -1.19);
 
+  /// Title of a profile setup step, for example "What do you study?" (30).
+  static TextStyle get stepTitle =>
+      _base(30, FontWeight.w800, height: 1.1, letterSpacing: -0.9);
+
   /// Big course title, for example "CS 310" in the course header (30).
   static TextStyle get courseTitle =>
       _base(30, FontWeight.w800, height: 1.05, letterSpacing: -1.05);

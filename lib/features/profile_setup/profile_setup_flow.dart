@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+
+import '../../core/routes/app_routes.dart';
+import '../../core/widgets/app_toast.dart';
+import '../../models/user_profile.dart';
+import '../../services/auth_service.dart';
+import 'profile_intro_screen.dart';
+import 'widgets/setup_step_scaffold.dart';
+
+/// The screens of profile setup, in order.
+enum SetupStep { intro, program, year, courses, exchange, allSet }
+
+/// Runs profile setup: the intro, four steps and "You're all set".
+///
+/// It keeps the answers in one [UserProfile] draft while the user moves
+/// forward and back, and saves it at the end. Any step can be skipped;
+/// a skipped step leaves its part of the profile empty.
+class ProfileSetupFlow extends StatefulWidget {
+  const ProfileSetupFlow({super.key});
+
+  @override
+  State<ProfileSetupFlow> createState() => _ProfileSetupFlowState();
+}
+
+class _ProfileSetupFlowState extends State<ProfileSetupFlow> {
+  SetupStep _step = SetupStep.intro;
+  final UserProfile _draft = const UserProfile();
+  bool _saving = false;
+
+  void _goTo(SetupStep step) => setState(() => _step = step);
+
+  void _next() => _goTo(SetupStep.values[_step.index + 1]);
+
+  void _back() => _goTo(SetupStep.values[_step.index - 1]);
+
+  /// Saves [profile] and lets the auth gate open Home.
+  Future<void> _finish(UserProfile profile) async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      await AuthScope.of(context).saveProfile(profile);
+      if (mounted) await AppRoutes.restart(context);
+    } on AuthException {
+      if (mounted) {
+        AppToast.show(
+          context,
+          'No connection. Check your internet and try again.',
+          isError: true,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final onFirstOrLast = _step == SetupStep.intro || _step == SetupStep.allSet;
+    return PopScope(
+      // The phone's back gesture goes to the previous step, not out of
+      // setup.
+      canPop: onFirstOrLast,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _back();
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: KeyedSubtree(key: ValueKey(_step), child: _buildStep()),
+      ),
+    );
+  }
+
+  Widget _buildStep() {
+    return switch (_step) {
+      SetupStep.intro => ProfileIntroScreen(
+        onStart: _next,
+        skipping: _saving,
+        // Skip for now saves an empty profile, so Home opens next time.
+        onSkip: () => _finish(const UserProfile()),
+      ),
+      // The four steps and "You're all set" are added in the next commits.
+      _ => SetupStepScaffold(
+        step: _step.index.clamp(1, SetupStepScaffold.totalSteps),
+        title: 'Coming soon',
+        onBack: _back,
+        onPrimary: () => _step == SetupStep.allSet ? _finish(_draft) : _next(),
+        onSkip: () => _step == SetupStep.allSet ? _finish(_draft) : _next(),
+        child: const SizedBox.shrink(),
+      ),
+    };
+  }
+}
