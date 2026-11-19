@@ -95,6 +95,18 @@ void main() {
     expect(find.text('Syllabus, Fall 2026'), findsOneWidget);
     expect(find.text('None'), findsOneWidget); // no corequisite
     expect(find.text('Computer Science 62%'), findsOneWidget);
+    // The share bar is drawn: four 16 px slices, widest first.
+    final slices = find.descendant(
+      of: find.byKey(const ValueKey('major-shares-bar')),
+      matching: find.byType(DecoratedBox),
+    );
+    expect(slices, findsNWidgets(4));
+    final sizes = [
+      for (final e in slices.evaluate())
+        tester.getSize(find.byWidget(e.widget)),
+    ];
+    expect(sizes.every((s) => s.height == 16), isTrue);
+    expect(sizes.first.width, greaterThan(sizes.last.width * 5));
     expect(find.text('Other 10%'), findsOneWidget);
   });
 

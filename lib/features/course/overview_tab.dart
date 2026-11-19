@@ -316,8 +316,12 @@ class _MajorSharesBar extends StatelessWidget {
     const square = Radius.circular(4);
     return ExcludeSemantics(
       child: SizedBox(
+        key: const ValueKey('major-shares-bar'),
         height: 16,
         child: Row(
+          // The slices have no child, so without stretch they would be
+          // 0 px tall and the bar would not show.
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (final (i, share) in shares.indexed) ...[
               if (i > 0) const SizedBox(width: 3),
