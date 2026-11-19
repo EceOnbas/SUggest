@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import '../theme/app_colors.dart';
+
 /// Builds the shape of a sakura branch from a course's ratings.
 ///
 /// The shape comes from the generator in the SUggest design files, so the
@@ -15,28 +17,18 @@ import 'dart:ui';
 class SakuraGenerator {
   SakuraGenerator._();
 
-  /// Pink stops from light (1, easy) to dark (5, hard).
-  static const _stops = <List<int>>[
-    [251, 227, 232],
-    [245, 184, 198],
-    [229, 138, 163],
-    [184, 84, 117],
-    [110, 36, 67],
-  ];
-
   /// How much thinner each level of the branch is than the trunk.
   static const _taper = [1.0, 0.62, 0.4, 0.26, 0.17];
 
   static double _clamp(double v) => v.clamp(1.0, 5.0).toDouble();
 
-  /// The pink for a difficulty between 1 and 5.
+  /// The pink for a difficulty between 1 and 5: every decimal gets its
+  /// own shade, mixed between the two nearest of [AppColors.blossomRamp].
   static Color blossomColor(double difficulty) {
+    const stops = AppColors.blossomRamp;
     final t = _clamp(difficulty) - 1;
     final i = math.min(3, t.floor());
-    final f = t - i;
-    int mix(int k) =>
-        (_stops[i][k] + (_stops[i + 1][k] - _stops[i][k]) * f).round();
-    return Color.fromARGB(255, mix(0), mix(1), mix(2));
+    return Color.lerp(stops[i], stops[i + 1], t - i)!;
   }
 
   /// Fewest blossoms, at attendance 1: about as many as CS 310 used to
@@ -148,7 +140,7 @@ class SakuraGenerator {
       frontBlossoms: front,
       centers: centers,
       blossomColor: blossomColor(difficulty),
-      deepColor: blossomColor(_clamp(difficulty) + 0.9),
+      deepColor: AppColors.blossomCenter,
       petalOutlineWidth: math.max(0.5, mn / 400),
       blossomCount: math.min(n, spots.length),
     );

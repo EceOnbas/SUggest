@@ -132,7 +132,7 @@ class _DifficultyBar extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(AppRadius.pill),
                           gradient: const LinearGradient(
-                            colors: AppColors.sakuraRamp,
+                            colors: AppColors.blossomRamp,
                           ),
                         ),
                       ),

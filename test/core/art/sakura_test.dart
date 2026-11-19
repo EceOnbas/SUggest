@@ -60,10 +60,10 @@ void main() {
   });
 
   test('difficulty picks the pink from light to dark', () {
-    expect(SakuraGenerator.blossomColor(1), AppColors.sakura1);
-    expect(SakuraGenerator.blossomColor(5), AppColors.sakura5);
-    expect(SakuraGenerator.blossomColor(9), AppColors.sakura5);
-    expect(SakuraGenerator.blossomColor(3), AppColors.sakura3);
+    expect(SakuraGenerator.blossomColor(1), AppColors.blossom1);
+    expect(SakuraGenerator.blossomColor(5), AppColors.blossom5);
+    expect(SakuraGenerator.blossomColor(9), AppColors.blossom5);
+    expect(SakuraGenerator.blossomColor(3), AppColors.blossom3);
   });
 
   testWidgets('SakuraBranch paints and is hidden from screen readers', (

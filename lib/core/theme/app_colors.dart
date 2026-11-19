@@ -34,13 +34,25 @@ abstract final class AppColors {
   static const tagBackground = Color(0xFFFCEFC7);
   static const tagText = Color(0xFF7A4F01);
 
-  // Sakura pinks: light to dark, used by the branch art and the Easy–Hard bar.
+  // Sakura pinks: light to dark, used by tags and other UI accents.
   static const sakura1 = Color(0xFFFBE3E8);
   static const sakura2 = Color(0xFFF5B8C6);
   static const sakura3 = Color(0xFFE58AA3);
   static const sakura4 = Color(0xFFB85475);
   static const sakura5 = Color(0xFF6E2443);
   static const sakuraRamp = [sakura1, sakura2, sakura3, sakura4, sakura5];
+
+  // Blossom pinks: soft, like real cherry blossoms. Easy courses are the
+  // palest, hard ones a deeper pink. Used by the branch and the Easy–Hard bar.
+  static const blossom1 = Color(0xFFFBE4EA);
+  static const blossom2 = Color(0xFFF8D2DC);
+  static const blossom3 = Color(0xFFF4BBCB);
+  static const blossom4 = Color(0xFFEE9FB6);
+  static const blossom5 = Color(0xFFE583A0);
+  static const blossomRamp = [blossom1, blossom2, blossom3, blossom4, blossom5];
+
+  /// Blossom centers and petal outlines.
+  static const blossomCenter = Color(0xFFC4506F);
 
   /// Wood color of the sakura branch.
   static const bark = Color(0xFF3A2A30);
