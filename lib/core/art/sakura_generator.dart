@@ -3,8 +3,9 @@ import 'dart:ui';
 
 /// Builds the shape of a sakura branch from a course's ratings.
 ///
-/// This is a Dart copy of the generator in the SUggest design files, so the
-/// same seed draws the same branch in the app as in the wireframes:
+/// The shape comes from the generator in the SUggest design files, so the
+/// same seed grows the same branch in the app as in the wireframes. The
+/// blossom count was raised later so strict courses look full:
 /// - the seed (usually the course code) decides the shape,
 /// - difficulty decides how deep the pink is,
 /// - workload decides how thick the wood is,
@@ -38,9 +39,23 @@ class SakuraGenerator {
     return Color.fromARGB(255, mix(0), mix(1), mix(2));
   }
 
-  /// Number of blossoms for an attendance rating: 6 at 1, 38 at 5.
-  static int blossomCount(double attendance) =>
-      (6 + (_clamp(attendance) - 1) * 8).round();
+  /// Fewest blossoms, at attendance 1: about as many as CS 310 used to
+  /// show, so no branch ever looks bare.
+  static const minBlossoms = 15;
+
+  /// Most blossoms, at attendance 5: a full tree.
+  static const maxBlossoms = 120;
+
+  /// Number of blossoms for an attendance rating, from [minBlossoms] at 1
+  /// to [maxBlossoms] at 5.
+  ///
+  /// It changes with every decimal (4.34 and 4.6 differ by about 10
+  /// blossoms) and grows faster at the top, so 4–5 looks really dense.
+  static int blossomCount(double attendance) {
+    final t = (_clamp(attendance) - 1) / 4; // 0 at 1, 1 at 5
+    return (minBlossoms + (maxBlossoms - minBlossoms) * math.pow(t, 1.6))
+        .round();
+  }
 
   static SakuraGeometry generate({
     required String seed,

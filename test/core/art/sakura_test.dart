@@ -33,8 +33,15 @@ void main() {
   });
 
   test('stricter attendance means more blossoms', () {
-    expect(SakuraGenerator.blossomCount(1), 6);
-    expect(SakuraGenerator.blossomCount(5), 38);
+    expect(SakuraGenerator.blossomCount(1), SakuraGenerator.minBlossoms);
+    expect(SakuraGenerator.blossomCount(5), SakuraGenerator.maxBlossoms);
+    // Every decimal counts: 4.34 and 4.6 look different.
+    expect(
+      SakuraGenerator.blossomCount(4.6) - SakuraGenerator.blossomCount(4.34),
+      greaterThanOrEqualTo(8),
+    );
+    // A full tree really gets all its blossoms.
+    expect(_make(a: 5).blossomCount, SakuraGenerator.maxBlossoms);
     expect(_make(a: 5).blossomCount, greaterThan(_make(a: 1).blossomCount));
   });
 
@@ -42,6 +49,13 @@ void main() {
     expect(
       _make(w: 5).branchWidths[0],
       greaterThan(_make(w: 1).branchWidths[0]),
+    );
+  });
+
+  test('every decimal of difficulty changes the pink', () {
+    expect(
+      SakuraGenerator.blossomColor(4.34),
+      isNot(SakuraGenerator.blossomColor(4.6)),
     );
   });
 

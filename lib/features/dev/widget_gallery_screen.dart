@@ -115,41 +115,11 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
             Text('Sakura branches', style: AppTextStyles.heading),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Easy and light, then CS 310, then hard, strict and heavy.',
+              'Drag a rating: every decimal changes the branch.',
               style: AppTextStyles.bodySmall,
             ),
             const SizedBox(height: AppSpacing.md),
-            const SizedBox(
-              height: 150,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SakuraBranch(
-                      seed: 'HUM 201',
-                      difficulty: 1.4,
-                      workload: 1.5,
-                      attendance: 1.5,
-                    ),
-                  ),
-                  Expanded(
-                    child: SakuraBranch(
-                      seed: 'CS 310',
-                      difficulty: 3.6,
-                      workload: 4.2,
-                      attendance: 2.1,
-                    ),
-                  ),
-                  Expanded(
-                    child: SakuraBranch(
-                      seed: 'MATH 201',
-                      difficulty: 4.8,
-                      workload: 4.6,
-                      attendance: 4.8,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const _SakuraPlayground(),
             const SizedBox(height: AppSpacing.xl),
             Text('Onigiri', style: AppTextStyles.heading),
             const SizedBox(height: AppSpacing.md),
@@ -264,6 +234,68 @@ class _WidgetGalleryScreenState extends State<WidgetGalleryScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// One branch with a slider for each rating, to show that the pink, the
+/// wood and the blossoms follow the exact average (4.34 and 4.6 differ).
+class _SakuraPlayground extends StatefulWidget {
+  const _SakuraPlayground();
+
+  @override
+  State<_SakuraPlayground> createState() => _SakuraPlaygroundState();
+}
+
+class _SakuraPlaygroundState extends State<_SakuraPlayground> {
+  // Start from CS 310's ratings.
+  double _difficulty = 3.6;
+  double _workload = 4.2;
+  double _attendance = 2.1;
+
+  Widget _slider(String label, double value, ValueChanged<double> onChanged) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            '$label ${value.toStringAsFixed(2)}',
+            style: AppTextStyles.label,
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Slider(value: value, min: 1, max: 5, onChanged: onChanged),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+          height: 220,
+          child: SakuraBranch(
+            seed: 'CS 310',
+            difficulty: _difficulty,
+            workload: _workload,
+            attendance: _attendance,
+          ),
+        ),
+        _slider(
+          'Difficulty',
+          _difficulty,
+          (v) => setState(() => _difficulty = v),
+        ),
+        _slider('Workload', _workload, (v) => setState(() => _workload = v)),
+        _slider(
+          'Attendance',
+          _attendance,
+          (v) => setState(() => _attendance = v),
+        ),
+      ],
     );
   }
 }
