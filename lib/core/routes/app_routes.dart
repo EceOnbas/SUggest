@@ -8,6 +8,11 @@ import '../../features/auth/reset_link_sent_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/course/course_screen.dart';
 import '../../features/dev/widget_gallery_screen.dart';
+import '../../features/profile/edit_academic_screen.dart';
+import '../../features/profile/models/my_review.dart';
+import '../../features/profile/models/profile_details.dart';
+import '../../features/profile/my_courses_screen.dart';
+import '../../features/profile/write_review_screen.dart';
 import '../../features/profile_setup/profile_setup_flow.dart';
 import '../../features/shell/main_shell.dart';
 
@@ -30,6 +35,19 @@ abstract final class AppRoutes {
   static const home = '/home';
   static const course = '/course';
   static const gallery = '/gallery';
+
+  /// Takes the [MyReview] to edit as its argument, a course code such as
+  /// 'CS 310' to start with that course, or nothing. Returns the saved
+  /// review.
+  static const writeReview = '/write-review';
+
+  /// The student's courses taken. Takes an optional course code to start
+  /// the add form with.
+  static const myCourses = '/my-courses';
+
+  /// Takes [EditAcademicArgs] as its argument. Returns the saved
+  /// [AcademicDetails].
+  static const editAcademic = '/edit-academic';
 
   /// Screens opened by name with no arguments.
   static final Map<String, WidgetBuilder> table = {
@@ -62,6 +80,33 @@ abstract final class AppRoutes {
       return MaterialPageRoute<void>(
         settings: settings,
         builder: (_) => ResetLinkSentScreen(email: email),
+      );
+    }
+    if (settings.name == writeReview) {
+      return MaterialPageRoute<MyReview>(
+        settings: settings,
+        fullscreenDialog: true,
+        builder: (_) => switch (settings.arguments) {
+          final MyReview review => WriteReviewScreen(existing: review),
+          final String code => WriteReviewScreen(courseCode: code),
+          _ => const WriteReviewScreen(),
+        },
+      );
+    }
+    if (settings.name == myCourses) {
+      return MaterialPageRoute<bool>(
+        settings: settings,
+        builder: (_) =>
+            MyCoursesScreen(preselectedCode: settings.arguments as String?),
+      );
+    }
+    if (settings.name == editAcademic) {
+      final args =
+          settings.arguments as EditAcademicArgs? ??
+          const EditAcademicArgs(AcademicDetails());
+      return MaterialPageRoute<AcademicDetails>(
+        settings: settings,
+        builder: (_) => EditAcademicScreen(args: args),
       );
     }
     return null;

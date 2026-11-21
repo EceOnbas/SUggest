@@ -8,7 +8,13 @@ import 'setup_flow_test.dart';
 
 Future<void> _pick(WidgetTester tester, String current, String option) async {
   // Open the first dropdown that shows [current], then choose [option].
-  final field = find.text(current).first;
+  // Tap the dropdown itself: its hint text does not take taps.
+  final field = find
+      .ancestor(
+        of: find.text(current).first,
+        matching: find.byType(DropdownButton<String>),
+      )
+      .first;
   await tester.ensureVisible(field);
   await tester.tap(field);
   await tester.pumpAndSettle();

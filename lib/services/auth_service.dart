@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 
 import '../models/user_profile.dart';
@@ -28,6 +30,9 @@ enum AuthError {
   /// Create account with an email that already has an account.
   emailInUse,
 
+  /// Create account or change handle with a handle someone else has.
+  handleInUse,
+
   /// No internet.
   network,
 }
@@ -38,6 +43,48 @@ class AuthException implements Exception {
 
   @override
   String toString() => 'AuthException($error)';
+}
+
+/// The public handle shown on a student's reviews instead of their name,
+/// for example "bosphorus_coder" (shown as "@bosphorus_coder").
+abstract final class HandleRules {
+  static final _pattern = RegExp(r'^[a-z0-9_]{3,20}$');
+
+  /// The message shown under the field when [isValid] fails.
+  static const formatMessage =
+      'Use 3–20 lowercase letters, numbers or underscores.';
+
+  /// The message shown when someone else has the handle.
+  static const takenMessage = 'That handle is already taken. Try another one.';
+
+  /// Lower case with no "@" or spaces around, so "@Deniz " is "deniz".
+  static String clean(String handle) {
+    final text = handle.trim().toLowerCase();
+    return text.startsWith('@') ? text.substring(1) : text;
+  }
+
+  static bool isValid(String handle) => _pattern.hasMatch(clean(handle));
+
+  static const _words = [
+    'sakura',
+    'tulip',
+    'bosphorus',
+    'ferry',
+    'simit',
+    'campus',
+    'maple',
+    'harbor',
+  ];
+  static const _animals = ['owl', 'fox', 'heron', 'lynx', 'otter', 'gull'];
+
+  /// A random handle such as "tulip_heron42". Pass [random] for a
+  /// repeatable result.
+  static String generate([Random? random]) {
+    final r = random ?? Random();
+    final word = _words[r.nextInt(_words.length)];
+    final animal = _animals[r.nextInt(_animals.length)];
+    return '${word}_$animal${10 + r.nextInt(90)}';
+  }
 }
 
 /// Sign-in, sign-up, verification and the private profile.
@@ -54,12 +101,23 @@ abstract class AuthService extends ChangeNotifier {
   /// The private profile, or null before setup.
   UserProfile? get profile;
 
+  /// The public handle of the signed-in user, without the "@", or null.
+  String? get handle;
+
   Future<void> logIn({required String localPart, required String password});
 
+  /// Creates the account. [handle] is the public handle the student
+  /// chose; when it is null or empty, a free one is made up. Fails with
+  /// [AuthError.handleInUse] when the handle is taken.
   Future<void> createAccount({
     required String localPart,
     required String password,
+    String? handle,
   });
+
+  /// Changes the public handle. Fails with [AuthError.handleInUse] when
+  /// another student has it.
+  Future<void> changeHandle(String handle);
 
   /// Sends the verification link again. The old link stops working.
   Future<void> resendVerificationEmail();
