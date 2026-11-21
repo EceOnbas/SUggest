@@ -8,6 +8,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/password_rules.dart';
 import '../../core/utils/su_email.dart';
 import '../../core/widgets/app_bottom_sheet.dart';
+import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/app_toast.dart';
 import '../../core/widgets/fill_scroll_view.dart';
 import '../../core/widgets/password_field.dart';
@@ -18,8 +19,8 @@ import '../../services/auth_service.dart';
 import 'widgets/password_rules_list.dart';
 import 'widgets/sprig_header.dart';
 
-/// Create an account with the SU email, a password and the community
-/// rules. The button stays faded until every field is valid; problems
+/// Create an account with the SU email, an optional public handle, a
+/// password and the community rules. The button stays faded until every field is valid; problems
 /// show under their field once the user leaves it.
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -35,14 +36,17 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _email = TextEditingController();
+  final _handle = TextEditingController();
   final _password = TextEditingController();
   final _repeat = TextEditingController();
   final _emailFocus = FocusNode();
+  final _handleFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
   // A field is "touched" once the user has left it; only then do its
   // problems show, so nothing turns red while they are still typing.
   bool _emailTouched = false;
+  bool _handleTouched = false;
   bool _passwordTouched = false;
   bool _agreed = false;
   bool _loading = false;
@@ -50,14 +54,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   /// Set when the service says the email already has an account.
   String? _emailTakenError;
 
+  /// Set when the service says someone else has the handle.
+  String? _handleTakenError;
+
   @override
   void initState() {
     super.initState();
-    for (final c in [_email, _password, _repeat]) {
+    for (final c in [_email, _handle, _password, _repeat]) {
       c.addListener(_refresh);
     }
     _emailFocus.addListener(() {
       if (!_emailFocus.hasFocus) setState(() => _emailTouched = true);
+    });
+    _handleFocus.addListener(() {
+      if (!_handleFocus.hasFocus) setState(() => _handleTouched = true);
     });
     _passwordFocus.addListener(() {
       if (!_passwordFocus.hasFocus) setState(() => _passwordTouched = true);
@@ -68,21 +78,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    for (final c in [_email, _password, _repeat]) {
+    for (final c in [_email, _handle, _password, _repeat]) {
       c.dispose();
     }
     _emailFocus.dispose();
+    _handleFocus.dispose();
     _passwordFocus.dispose();
     super.dispose();
   }
 
   bool get _emailValid => SuEmail.isValidLocalPart(_email.text);
+
+  /// The handle may be left empty: then one is made up.
+  bool get _handleValid =>
+      _handle.text.trim().isEmpty || HandleRules.isValid(_handle.text);
   bool get _passwordValid => PasswordRule.allMetBy(_password.text);
   bool get _mismatch =>
       _repeat.text.isNotEmpty && _repeat.text != _password.text;
 
   bool get _canSubmit =>
       _emailValid &&
+      _handleValid &&
+      _handleTakenError == null &&
       _passwordValid &&
       _repeat.text == _password.text &&
       _agreed &&
@@ -96,6 +113,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return null;
   }
 
+  String? get _handleError {
+    if (_handleTakenError != null) return _handleTakenError;
+    if (_handleTouched && !_handleValid) return HandleRules.formatMessage;
+    return null;
+  }
+
+  /// Fills the handle field with a made-up handle.
+  void _suggestHandle() {
+    _handle.text = HandleRules.generate();
+    setState(() {
+      _handleTouched = true;
+      _handleTakenError = null;
+    });
+  }
+
   bool get _showRuleFailures =>
       _passwordTouched && _password.text.isNotEmpty && !_passwordValid;
 
@@ -103,14 +135,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
     try {
-      await AuthScope.of(context)
-          .createAccount(localPart: _email.text, password: _password.text);
+      await AuthScope.of(context).createAccount(
+        localPart: _email.text,
+        password: _password.text,
+        handle: _handle.text,
+      );
       // The gate opens Check your inbox for the new, unverified account.
       if (mounted) await AppRoutes.restart(context);
     } on AuthException catch (e) {
       if (!mounted) return;
       if (e.error == AuthError.emailInUse) {
         setState(() => _emailTakenError = SignUpScreen.emailTakenMessage);
+      } else if (e.error == AuthError.handleInUse) {
+        setState(() => _handleTakenError = HandleRules.takenMessage);
       } else {
         AppToast.show(
           context,
@@ -180,6 +217,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (_) {
                         if (_emailTakenError != null) {
                           setState(() => _emailTakenError = null);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    AppTextField(
+                      label: 'Handle',
+                      optional: true,
+                      controller: _handle,
+                      focusNode: _handleFocus,
+                      hintText: 'e.g. tulip_heron42',
+                      autocorrect: false,
+                      textInputAction: TextInputAction.next,
+                      helperText:
+                          'Shown on your reviews instead of your name. '
+                          "Leave it empty and we'll make one up.",
+                      errorText: _handleError,
+                      suffix: IconButton(
+                        tooltip: 'Suggest a handle',
+                        onPressed: _suggestHandle,
+                        icon: const Icon(
+                          Icons.casino_outlined,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      onChanged: (_) {
+                        if (_handleTakenError != null) {
+                          setState(() => _handleTakenError = null);
                         }
                       },
                     ),

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/app_back_button.dart';
@@ -148,7 +149,7 @@ class _CourseScreenState extends State<CourseScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const _WriteReviewBar(),
+      bottomNavigationBar: _WriteReviewBar(courseCode: widget.courseCode),
     );
   }
 
@@ -219,7 +220,22 @@ class _MessagePage extends StatelessWidget {
 
 /// The bar that keeps "Write a review" at the bottom of the screen.
 class _WriteReviewBar extends StatelessWidget {
-  const _WriteReviewBar();
+  const _WriteReviewBar({required this.courseCode});
+
+  final String courseCode;
+
+  /// Opens the review form for this course. The form checks that the
+  /// student took it, and opens their review instead if they have one.
+  Future<void> _write(BuildContext context) async {
+    final saved = await Navigator.pushNamed<Object?>(
+      context,
+      AppRoutes.writeReview,
+      arguments: courseCode,
+    );
+    if (saved != null && context.mounted) {
+      AppToast.show(context, 'Your review was saved.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,12 +251,7 @@ class _WriteReviewBar extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
           child: PrimaryButton(
             label: 'Write a review',
-            // The review form is a teammate's screen; it opens from here
-            // once it is added.
-            onPressed: () => AppToast.show(
-              context,
-              'Writing a review opens here once that screen is added.',
-            ),
+            onPressed: () => _write(context),
           ),
         ),
       ),

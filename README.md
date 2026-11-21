@@ -45,7 +45,9 @@ flutter test
 Step 2 has no backend yet, so sign-in is UI-only and nothing is saved when the app closes.
 
 - **Create account** works with any name before `@sabanciuniv.edu`. On "Check your inbox", the first "I've verified" says "Not verified yet" and the second one passes, so both states can be seen.
-- A ready-made demo account is listed in `lib/services/fake_auth_service.dart` (`demoAccounts`).
+- Ready-made demo accounts are listed in `lib/services/fake_auth_service.dart` (`demoAccounts`):
+  - `demo.student` / `sakura2026`: an empty account, like a new student's.
+  - `deniz.yilmaz` / `sakura2026`: a full showcase profile with courses taken, an exchange and two reviews, to see My Profile and My Courses filled in.
 
 ## 🗂 Project structure
 
