@@ -9,7 +9,7 @@ class UserProfile {
     this.currentTerm,
     this.startTerm,
     this.coursesTaken = const [],
-    this.exchange,
+    this.exchanges = const [],
   });
 
   /// Every field is optional: each setup step can be skipped.
@@ -23,8 +23,17 @@ class UserProfile {
   final String? startTerm;
   final List<TakenCourse> coursesTaken;
 
-  /// Null when the student has not been on exchange.
-  final ExchangeInfo? exchange;
+  /// The student's outgoing exchange experiences, at most one for each
+  /// [ExchangeProgram]. Empty when they have not been on exchange.
+  final List<ExchangeInfo> exchanges;
+
+  /// The experience for [program], or null when there is none.
+  ExchangeInfo? exchangeFor(ExchangeProgram program) {
+    for (final e in exchanges) {
+      if (e.program == program) return e;
+    }
+    return null;
+  }
 
   /// A copy with the program step's answers. Unlike [copyWith], a null
   /// here clears the field (the user picked "None").
@@ -40,7 +49,7 @@ class UserProfile {
     currentTerm: currentTerm,
     startTerm: startTerm,
     coursesTaken: coursesTaken,
-    exchange: exchange,
+    exchanges: exchanges,
   );
 
   /// A copy with the year step's answers.
@@ -56,11 +65,12 @@ class UserProfile {
     currentTerm: currentTerm,
     startTerm: startTerm,
     coursesTaken: coursesTaken,
-    exchange: exchange,
+    exchanges: exchanges,
   );
 
-  /// A copy with the exchange step's answer; null means "Not yet".
-  UserProfile withExchange(ExchangeInfo? exchange) => UserProfile(
+  /// A copy with the exchange step's answers; an empty list means
+  /// "Not yet".
+  UserProfile withExchanges(List<ExchangeInfo> exchanges) => UserProfile(
     major: major,
     doubleMajor: doubleMajor,
     minor: minor,
@@ -68,7 +78,7 @@ class UserProfile {
     currentTerm: currentTerm,
     startTerm: startTerm,
     coursesTaken: coursesTaken,
-    exchange: exchange,
+    exchanges: exchanges,
   );
 
   UserProfile copyWith({
@@ -79,7 +89,7 @@ class UserProfile {
     String? currentTerm,
     String? startTerm,
     List<TakenCourse>? coursesTaken,
-    ExchangeInfo? exchange,
+    List<ExchangeInfo>? exchanges,
   }) => UserProfile(
     major: major ?? this.major,
     doubleMajor: doubleMajor ?? this.doubleMajor,
@@ -88,7 +98,7 @@ class UserProfile {
     currentTerm: currentTerm ?? this.currentTerm,
     startTerm: startTerm ?? this.startTerm,
     coursesTaken: coursesTaken ?? this.coursesTaken,
-    exchange: exchange ?? this.exchange,
+    exchanges: exchanges ?? this.exchanges,
   );
 }
 
@@ -107,14 +117,16 @@ class TakenCourse {
   final String instructor;
 }
 
+/// The two kinds of outgoing exchange. A student may have done both.
 enum ExchangeProgram {
-  erasmus('Erasmus+'),
-  bilateral('Bilateral');
+  erasmus('Erasmus'),
+  exchange('Exchange');
 
   const ExchangeProgram(this.label);
   final String label;
 }
 
+/// One outgoing exchange experience: where and when.
 class ExchangeInfo {
   const ExchangeInfo({
     required this.hostUniversity,

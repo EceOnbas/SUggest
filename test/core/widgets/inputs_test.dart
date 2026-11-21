@@ -197,7 +197,7 @@ void main() {
         ),
       );
       expect(find.text('Choose your major'), findsOneWidget);
-      await tester.tap(find.text('Choose your major'));
+      await tester.tap(find.byType(DropdownButton<String>));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Economics').last);
       await tester.pumpAndSettle();
@@ -216,7 +216,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.text('Pick a course first'));
+      await tester.tap(find.byType(DropdownButton<String>));
       await tester.pumpAndSettle();
       expect(find.text('Fall 2025'), findsNothing);
     });
