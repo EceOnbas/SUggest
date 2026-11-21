@@ -8,6 +8,7 @@ import '../../core/widgets/app_dropdown_field.dart';
 import '../../core/widgets/confirm_dialog.dart';
 import '../../data/mock_data.dart';
 import '../../models/user_profile.dart';
+import '../profile/models/my_course.dart';
 import 'widgets/setup_step_scaffold.dart';
 
 /// Step 3: the courses the student has finished.
@@ -30,6 +31,10 @@ class CoursesStep extends StatefulWidget {
   final ValueChanged<UserProfile> onContinue;
   final VoidCallback onSkip;
 
+  /// Shown under Term when the student has no finished term yet.
+  static const noFinishedTermsMessage =
+      'Courses can be added once their term is over.';
+
   @override
   State<CoursesStep> createState() => _CoursesStepState();
 }
@@ -37,6 +42,9 @@ class CoursesStep extends StatefulWidget {
 class _CoursesStepState extends State<CoursesStep> {
   final _formKey = GlobalKey<FormState>();
   late final List<TakenCourse> _courses = [...widget.profile.coursesTaken];
+
+  /// Finished terms from the start term on, the same rule as My Courses.
+  late final List<String> _terms = finishedTermsFor(widget.profile);
 
   // Filled in by the form fields when the form is saved.
   String? _course;
@@ -157,10 +165,13 @@ class _CoursesStepState extends State<CoursesStep> {
               Expanded(
                 child: AppDropdownFormField<String>(
                   label: 'Term',
-                  hintText: 'Choose',
-                  // Finished courses are from past terms.
-                  items: MockData.terms.skip(1).toList(),
-                  validator: (value) => value == null ? 'Pick a term.' : null,
+                  hintText: _terms.isEmpty ? 'None yet' : 'Choose',
+                  items: _terms,
+                  validator: (value) => value != null
+                      ? null
+                      : _terms.isEmpty
+                      ? CoursesStep.noFinishedTermsMessage
+                      : 'Pick a term.',
                   onSaved: (value) => _term = value,
                 ),
               ),
