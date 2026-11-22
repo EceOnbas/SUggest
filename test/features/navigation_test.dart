@@ -26,7 +26,7 @@ void main() {
 
     await tester.tap(find.text('Community'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Exchange maps'), findsOneWidget);
+    expect(find.text('Exchange'), findsOneWidget);
 
     await tester.tap(find.text('Profile'));
     await tester.pumpAndSettle();
