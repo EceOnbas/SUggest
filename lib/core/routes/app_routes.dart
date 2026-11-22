@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../features/admin/admin_screen.dart';
 import '../../features/auth/auth_gate.dart';
 import '../../features/auth/check_inbox_screen.dart';
 import '../../features/auth/forgot_password_screen.dart';
@@ -13,6 +14,9 @@ import '../../features/profile/models/my_review.dart';
 import '../../features/profile/models/profile_details.dart';
 import '../../features/profile/my_courses_screen.dart';
 import '../../features/profile/write_review_screen.dart';
+import '../../features/program/models/program_info.dart';
+import '../../features/program/program_screen.dart';
+import '../../features/program/programs_screen.dart';
 import '../../features/profile_setup/profile_setup_flow.dart';
 import '../../features/shell/main_shell.dart';
 
@@ -49,6 +53,15 @@ abstract final class AppRoutes {
   /// [AcademicDetails].
   static const editAcademic = '/edit-academic';
 
+  /// The list of majors, double majors and minors.
+  static const programs = '/programs';
+
+  /// One program's page. Takes a [ProgramRef] as its argument.
+  static const program = '/program';
+
+  /// The admin panel.
+  static const admin = '/admin';
+
   /// Screens opened by name with no arguments.
   static final Map<String, WidgetBuilder> table = {
     start: (_) => const AuthGate(),
@@ -59,6 +72,8 @@ abstract final class AppRoutes {
     profileSetup: (_) => const ProfileSetupFlow(),
     home: (_) => const MainShell(),
     gallery: (_) => const WidgetGalleryScreen(),
+    programs: (_) => const ProgramsScreen(),
+    admin: (_) => const AdminScreen(),
   };
 
   /// Clears the back stack and lets [AuthGate] pick the screen again.
@@ -107,6 +122,18 @@ abstract final class AppRoutes {
       return MaterialPageRoute<AcademicDetails>(
         settings: settings,
         builder: (_) => EditAcademicScreen(args: args),
+      );
+    }
+    if (settings.name == program) {
+      final ref =
+          settings.arguments as ProgramRef? ??
+          const ProgramRef(
+            name: 'Computer Science and Engineering',
+            type: ProgramType.major,
+          );
+      return MaterialPageRoute<void>(
+        settings: settings,
+        builder: (_) => ProgramScreen(program: ref),
       );
     }
     return null;
