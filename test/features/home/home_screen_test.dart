@@ -42,10 +42,18 @@ Widget _app(CatalogRepository repo, {List<Object?>? opened}) => MaterialApp(
 
 const _instant = MockCatalogRepository(delay: Duration.zero);
 
+/// A tall phone, so the whole scrolling page is built and on screen.
+void _tallScreen(WidgetTester tester) {
+  tester.view.physicalSize = const Size(430, 2400);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+}
+
 void main() {
   testWidgets('shows a loading skeleton, then the shelf and reviews', (
     tester,
   ) async {
+    _tallScreen(tester);
     await tester.pumpWidget(
       _app(const MockCatalogRepository(delay: Duration(milliseconds: 300))),
     );
@@ -83,14 +91,13 @@ void main() {
   });
 
   testWidgets('the Exchange card opens the exchange screen', (tester) async {
+    _tallScreen(tester);
     await tester.pumpWidget(_app(_instant));
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.byKey(const Key('open-exchange')));
     await tester.tap(find.byKey(const Key('open-exchange')));
-    await tester.pump();
-    expect(find.byType(ExchangeScreen), findsOneWidget);
     await tester.pumpAndSettle();
+    expect(find.byType(ExchangeScreen), findsOneWidget);
   });
 
   group('search', () {
