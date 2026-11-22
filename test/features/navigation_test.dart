@@ -20,6 +20,7 @@ Widget _app() => AuthScope(
 void main() {
   testWidgets('bottom bar switches between the three tabs', (tester) async {
     await tester.pumpWidget(_app());
+    await tester.pumpAndSettle(); // Home loads its courses first.
     expect(find.byType(MainShell), findsOneWidget);
     expect(find.text('Courses'), findsWidgets);
 
@@ -34,7 +35,8 @@ void main() {
 
   testWidgets('a course opens by code and goes back', (tester) async {
     await tester.pumpWidget(_app());
-    await tester.tap(find.text('Open CS 310'));
+    await tester.pumpAndSettle(); // Home loads its courses first.
+    await tester.tap(find.byKey(const Key('shelf-CS 310')));
     await tester.pumpAndSettle();
     expect(find.text('CS 310'), findsOneWidget);
     await tester.pageBack();
