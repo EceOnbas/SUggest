@@ -80,4 +80,76 @@ void main() {
     await auth.logOut();
     expect(auth.status, AuthStatus.signedOut);
   });
+
+  group('showcase account', () {
+    test('is ready with a full profile and a handle', () async {
+      const name = FakeAuthService.showcaseAccount;
+      await auth.logIn(
+        localPart: name,
+        password: FakeAuthService.demoAccounts[name]!,
+      );
+      expect(auth.status, AuthStatus.ready);
+      expect(auth.profile, FakeAuthService.showcaseProfile);
+      expect(auth.handle, FakeAuthService.demoHandles[name]);
+    });
+  });
+
+  group('handles', () {
+    Matcher handleInUse() => isA<AuthException>().having(
+      (e) => e.error,
+      'error',
+      AuthError.handleInUse,
+    );
+
+    test('a chosen handle is cleaned and kept', () async {
+      await auth.createAccount(
+        localPart: 'new.student',
+        password: 'abcdefg1',
+        handle: ' @Maple_Fox ',
+      );
+      expect(auth.handle, 'maple_fox');
+    });
+
+    test('an empty handle is made up, valid and free', () async {
+      await auth.createAccount(localPart: 'new.student', password: 'abcdefg1');
+      final handle = auth.handle!;
+      expect(HandleRules.isValid(handle), isTrue);
+      expect(FakeAuthService.takenHandles, isNot(contains(handle)));
+      expect(FakeAuthService.demoHandles.values, isNot(contains(handle)));
+    });
+
+    test("another student's handle cannot be used", () {
+      expect(
+        auth.createAccount(
+          localPart: 'new.student',
+          password: 'abcdefg1',
+          handle: FakeAuthService.takenHandles.first,
+        ),
+        throwsA(handleInUse()),
+      );
+    });
+
+    test('changeHandle saves a free handle and refuses a taken one', () async {
+      await auth.logIn(localPart: demoName, password: demoPassword);
+      await auth.changeHandle('simit_gull12');
+      expect(auth.handle, 'simit_gull12');
+      // Keeping your own handle is fine.
+      await auth.changeHandle('simit_gull12');
+
+      await expectLater(
+        auth.changeHandle(FakeAuthService.demoHandles.values.last),
+        throwsA(handleInUse()),
+      );
+      expect(auth.handle, 'simit_gull12');
+    });
+  });
+
+  test('HandleRules', () {
+    expect(HandleRules.clean(' @Deniz '), 'deniz');
+    expect(HandleRules.isValid('tulip_heron42'), isTrue);
+    expect(HandleRules.isValid('ab'), isFalse);
+    expect(HandleRules.isValid('has space'), isFalse);
+    expect(HandleRules.isValid('a' * 21), isFalse);
+    expect(HandleRules.isValid(HandleRules.generate()), isTrue);
+  });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:suggest/features/profile_setup/courses_step.dart';
 import 'package:suggest/services/fake_auth_service.dart';
 
 import 'setup_flow_test.dart';
@@ -42,6 +43,30 @@ Future<void> _add(
   await _pick(tester, 'Term', term);
   await _pick(tester, 'Instructor', instructor);
   await tapText(tester, 'Add course');
+}
+
+/// Answers the year step with [startTerm], then opens the courses step.
+Future<void> _openCoursesStarting(
+  WidgetTester tester,
+  String startTerm, {
+  Size size = const Size(390, 844),
+}) async {
+  await openSetup(tester, size: size);
+  await tapText(tester, 'Start');
+  await tapText(tester, 'Skip this step');
+  await tapText(tester, '3');
+  final start = find
+      .ancestor(
+        of: find.text('Choose a term'),
+        matching: find.byType(DropdownButton<String>),
+      )
+      .first;
+  await tester.tap(start);
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(startTerm).last);
+  await tester.pumpAndSettle();
+  await tapText(tester, 'Continue');
+  expect(find.text("Courses you've taken"), findsOneWidget);
 }
 
 void main() {
@@ -149,6 +174,43 @@ void main() {
     await _add(tester);
     await tapText(tester, 'Continue');
     expect(find.text('Save 1 course?'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('only finished terms since the start term are offered', (
+    tester,
+  ) async {
+    await _openCoursesStarting(tester, 'Fall 2025');
+    final term = find.descendant(
+      of: find
+          .ancestor(of: find.text('Term'), matching: find.byType(Column))
+          .first,
+      matching: find.byType(DropdownButton<String>),
+    );
+    await tester.ensureVisible(term);
+    await tester.tap(term);
+    await tester.pumpAndSettle();
+    expect(find.text('Spring 2026'), findsWidgets);
+    expect(find.text('Fall 2025'), findsWidgets);
+    expect(find.text('Spring 2025'), findsNothing);
+    expect(find.text('Fall 2026'), findsNothing);
+  });
+
+  testWidgets('a first-term student is told why no term fits', (tester) async {
+    await _openCoursesStarting(tester, 'Fall 2026');
+    expect(find.text('None yet'), findsOneWidget);
+    await tapText(tester, 'Add course');
+    expect(find.text(CoursesStep.noFinishedTermsMessage), findsOneWidget);
+  });
+
+  testWidgets('the empty term field fits a small phone with large text', (
+    tester,
+  ) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 1.6;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await _openCoursesStarting(tester, 'Fall 2026', size: const Size(320, 568));
+    await tapText(tester, 'Add course');
+    expect(find.text(CoursesStep.noFinishedTermsMessage), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

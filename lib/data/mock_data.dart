@@ -1,7 +1,6 @@
 import '../models/course.dart';
 import '../models/review.dart';
 import '../models/review_topic.dart';
-import '../models/user_profile.dart';
 
 /// Placeholder data for Step 2. Firebase replaces it in Step 3.
 ///
@@ -67,12 +66,21 @@ abstract final class MockData {
     'Philosophy',
   ];
 
+  /// Partner universities for the Exchange program.
   static const hostUniversities = [
     'TU Delft, Netherlands',
     'KU Leuven, Belgium',
     'Politecnico di Milano, Italy',
     'TU Munich, Germany',
     'National University of Singapore',
+  ];
+
+  /// Partner universities for Erasmus: the European ones only.
+  static const erasmusUniversities = [
+    'TU Delft, Netherlands',
+    'KU Leuven, Belgium',
+    'Politecnico di Milano, Italy',
+    'TU Munich, Germany',
   ];
 
   static const instructors = [
@@ -188,6 +196,7 @@ abstract final class MockData {
   static const reviews = <Review>[
     Review(
       id: 'r1',
+      authorHandle: 'sakura_dev',
       courseCode: 'CS 310',
       term: 'Spring 2026',
       instructor: 'Instructor A',
@@ -198,6 +207,7 @@ abstract final class MockData {
     ),
     Review(
       id: 'r2',
+      authorHandle: 'night_owl',
       courseCode: 'CS 310',
       term: 'Fall 2025',
       instructor: 'Instructor A',
@@ -208,6 +218,7 @@ abstract final class MockData {
     ),
     Review(
       id: 'r3',
+      authorHandle: 'tulip_coder',
       courseCode: 'CS 310',
       term: 'Fall 2025',
       instructor: 'Instructor B',
@@ -218,6 +229,7 @@ abstract final class MockData {
     ),
     Review(
       id: 'r4',
+      authorHandle: 'ferry_commuter',
       courseCode: 'CS 310',
       term: 'Spring 2025',
       instructor: 'Instructor B',
@@ -230,18 +242,4 @@ abstract final class MockData {
 
   static List<Review> reviewsFor(String courseCode) =>
       reviews.where((r) => r.courseCode == courseCode).toList();
-
-  /// Courses already on the list when "Courses you've taken" opens.
-  static const sampleTakenCourses = [
-    TakenCourse(
-      courseName: 'CS 201 Introduction to Computing',
-      term: 'Fall 2024',
-      instructor: 'Instructor B',
-    ),
-    TakenCourse(
-      courseName: 'MATH 102 Calculus II',
-      term: 'Spring 2025',
-      instructor: 'Instructor D',
-    ),
-  ];
 }

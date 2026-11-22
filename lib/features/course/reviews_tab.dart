@@ -143,6 +143,14 @@ class _ReviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (review.authorHandle != null)
+            Text(
+              '@${review.authorHandle}',
+              style: AppTextStyles.label.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           Text(
             '${review.term}, ${review.instructor}',
             style: AppTextStyles.helper,
