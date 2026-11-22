@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/routes/app_routes.dart';
+import '../../core/widgets/secondary_button.dart';
 import '../shell/team_placeholder_screen.dart';
 
 /// Community tab: exchange maps and program pages.
@@ -9,12 +11,22 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TeamPlaceholderScreen(
+    return TeamPlaceholderScreen(
       title: 'Community',
       owner: 'Emine Sena Cesur, Nil Sözlü',
       description:
           'Exchange maps (Erasmus and world) and program pages '
           '(major, minor, double major, usual route, posts).',
+      actions: [
+        SecondaryButton(
+          label: 'Programs',
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.programs),
+        ),
+        SecondaryButton(
+          label: 'Admin panel',
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.admin),
+        ),
+      ],
     );
   }
 }
