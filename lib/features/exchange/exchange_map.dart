@@ -212,11 +212,15 @@ class ExchangeMapPainter extends CustomPainter {
       text: TextSpan(text: text, style: style),
       textDirection: TextDirection.ltr,
     )..layout();
-    final x = (at.dx - fill.width / 2).clamp(
-      AppSpacing.xs,
-      math.max(AppSpacing.xs, size.width - fill.width - AppSpacing.xs),
-    );
-    final y = at.dy.clamp(0.0, math.max(0.0, size.height - fill.height));
+    final x = (at.dx - fill.width / 2)
+        .clamp(
+          AppSpacing.xs,
+          math.max(AppSpacing.xs, size.width - fill.width - AppSpacing.xs),
+        )
+        .toDouble();
+    final y = at.dy
+        .clamp(0.0, math.max(0.0, size.height - fill.height))
+        .toDouble();
     halo.paint(canvas, Offset(x, y));
     fill.paint(canvas, Offset(x, y));
   }
