@@ -40,7 +40,7 @@ void main() {
     expect(find.byType(ProfileIntroScreen), findsOneWidget);
     expect(find.text('Set up your private profile'), findsOneWidget);
     expect(
-      find.textContaining('Only you can see it.', findRichText: true),
+      find.textContaining('Only your handle is public.', findRichText: true),
       findsOneWidget,
     );
     expect(

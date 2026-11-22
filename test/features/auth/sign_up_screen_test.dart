@@ -36,17 +36,24 @@ Finder _field(String label) => find
     )
     .first;
 
+/// The optional Handle box, found by its hint.
+final _handleField = find.byWidgetPredicate(
+  (w) => w is TextField && w.decoration?.hintText == 'e.g. tulip_heron42',
+);
+
 FilledButton _button(WidgetTester tester) =>
     tester.widget(find.widgetWithText(FilledButton, 'Create account'));
 
 Future<void> _fill(
   WidgetTester tester, {
   String email = 'new.student',
+  String? handle,
   String password = 'sakura-time7',
   String? repeat,
   bool agree = true,
 }) async {
   await tester.enterText(_field('SU email'), email);
+  if (handle != null) await tester.enterText(_handleField, handle);
   await tester.enterText(_field('Password'), password);
   await tester.enterText(_field('Repeat password'), repeat ?? password);
   if (agree) {
@@ -68,6 +75,7 @@ void main() {
     expect(_button(tester).enabled, isFalse);
     await _fill(tester, agree: false);
     expect(_button(tester).enabled, isFalse);
+    await tester.ensureVisible(find.byType(Checkbox));
     await tester.tap(find.byType(Checkbox));
     await tester.pump();
     expect(_button(tester).enabled, isTrue);
@@ -81,6 +89,7 @@ void main() {
     await tester.pump();
     expect(find.textContaining('Add a digit'), findsNothing);
     // Leave the field.
+    await tester.ensureVisible(_field('Repeat password'));
     await tester.tap(_field('Repeat password'));
     await tester.pump();
     expect(
@@ -138,6 +147,37 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Create account'));
     await tester.pumpAndSettle();
     expect(find.byType(CheckInboxScreen), findsOneWidget);
+  });
+
+  testWidgets('a badly formed handle shows the rule after leaving it', (
+    tester,
+  ) async {
+    await _open(tester);
+    await _fill(tester, handle: 'Bad Handle!');
+    await tester.tap(_field('SU email'));
+    await tester.pump();
+    expect(find.text(HandleRules.formatMessage), findsOneWidget);
+    expect(_button(tester).enabled, isFalse);
+  });
+
+  testWidgets('a taken handle asks for another one', (tester) async {
+    await _open(tester);
+    await _fill(tester, handle: FakeAuthService.takenHandles.first);
+    await tester.ensureVisible(
+      find.widgetWithText(FilledButton, 'Create account'),
+    );
+    await tester.tap(find.widgetWithText(FilledButton, 'Create account'));
+    await tester.pumpAndSettle();
+    expect(find.text(HandleRules.takenMessage), findsOneWidget);
+    expect(find.byType(CheckInboxScreen), findsNothing);
+  });
+
+  testWidgets('the dice suggests a valid handle', (tester) async {
+    await _open(tester);
+    await tester.tap(find.byTooltip('Suggest a handle'));
+    await tester.pump();
+    final handle = tester.widget<TextField>(_handleField).controller!.text;
+    expect(HandleRules.isValid(handle), isTrue);
   });
 
   testWidgets('community rules sheet can agree for you', (tester) async {

@@ -28,9 +28,9 @@ class ProfileIntroScreen extends StatelessWidget {
   static const _points = [
     (
       Icons.lock_outline,
-      'Only you can see it.',
-      ' No one can open your profile, not even other students in your '
-          'major.',
+      'Only your handle is public.',
+      ' It appears on the reviews you post. No one can open your profile, '
+          'not even other students in your major.',
     ),
     (
       Icons.bar_chart_rounded,
