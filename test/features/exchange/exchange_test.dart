@@ -12,6 +12,22 @@ import 'package:suggest/features/exchange/geo.dart';
 
 const _instant = MockExchangeRepository(delay: Duration.zero);
 
+/// A tall phone, so the whole scrolling page is built and on screen.
+void _tallScreen(WidgetTester tester) {
+  tester.view.physicalSize = const Size(430, 3000);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+}
+
+/// Taps a chip, first scrolling its sideways row until the chip is visible.
+Future<void> _tapChip(WidgetTester tester, String label) async {
+  final chip = find.widgetWithText(AppChip, label);
+  await tester.ensureVisible(chip);
+  await tester.pumpAndSettle();
+  await tester.tap(chip);
+  await tester.pumpAndSettle();
+}
+
 class _Failing implements ExchangeRepository {
   @override
   Future<List<Destination>> fetchDestinations(MapRegion region) =>
@@ -101,11 +117,11 @@ void main() {
   testWidgets('picking a school shows only its posts; Show all resets', (
     tester,
   ) async {
+    _tallScreen(tester);
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(AppChip, 'Politecnico di Milano'));
-    await tester.pumpAndSettle();
+    await _tapChip(tester, 'Politecnico di Milano');
     expect(find.text('Showing Politecnico di Milano'), findsOneWidget);
     expect(find.textContaining('TU Munich · '), findsNothing);
 
@@ -116,13 +132,13 @@ void main() {
   });
 
   testWidgets('a topic with no posts shows the empty state', (tester) async {
+    _tallScreen(tester);
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(AppChip, 'Life abroad'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(AppChip, 'TU Wien'));
-    await tester.pumpAndSettle();
+    // Picking a school resets the topic, so pick the school first.
+    await _tapChip(tester, 'TU Wien');
+    await _tapChip(tester, 'Life abroad');
     expect(find.text('No posts here yet'), findsOneWidget);
   });
 

@@ -50,7 +50,9 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
     return (europe: europe, world: world, posts: posts);
   }
 
-  void _retry() => setState(() => _data = _load());
+  void _retry() => setState(() {
+    _data = _load();
+  });
 
   void _pickRegion(MapRegion region) => setState(() {
     _region = region;

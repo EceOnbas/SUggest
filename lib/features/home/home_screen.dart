@@ -64,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 return _Message(
                   ErrorState(
                     title: "Courses didn't load",
-                    onRetry: () => setState(() => _data = _load()),
+                    onRetry: () => setState(() {
+                      _data = _load();
+                    }),
                   ),
                 );
               }
